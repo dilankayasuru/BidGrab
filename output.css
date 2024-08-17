@@ -554,6 +554,44 @@ video {
   --tw-contain-style:  ;
 }
 
+.container {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+.visible {
+  visibility: visible;
+}
+
 .absolute {
   position: absolute;
 }
@@ -582,31 +620,9 @@ video {
   margin: auto;
 }
 
-.m-4 {
-  margin: 1rem;
-}
-
-.m-16 {
-  margin: 4rem;
-}
-
-.m-0 {
-  margin: 0px;
-}
-
-.my-0 {
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
 .my-8 {
   margin-top: 2rem;
   margin-bottom: 2rem;
-}
-
-.my-4 {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
 }
 
 .mb-2 {
@@ -657,40 +673,12 @@ video {
   cursor: pointer;
 }
 
-.auto-cols-\[clac\(\)\] {
-  grid-auto-columns: clac();
-}
-
-.auto-cols-\[calc\(100\%_\/_4_-_16px\)\] {
-  grid-auto-columns: calc(100% / 4 - 16px);
-}
-
-.auto-cols-\[calc\(100\%_\/_5_-_16px\)\] {
-  grid-auto-columns: calc(100% / 5 - 16px);
-}
-
 .auto-cols-\[calc\(100\%_\/_2_-_16px\)\] {
   grid-auto-columns: calc(100% / 2 - 16px);
 }
 
-.auto-cols-\[calc\(100\%_\/_1_-_16px\)\] {
-  grid-auto-columns: calc(100% / 1 - 16px);
-}
-
-.auto-cols-\[calc\(100\%_\/_3_-_16px\)\] {
-  grid-auto-columns: calc(100% / 3 - 16px);
-}
-
 .grid-flow-col {
   grid-auto-flow: column;
-}
-
-.place-content-center {
-  place-content: center;
-}
-
-.place-items-center {
-  place-items: center;
 }
 
 .items-center {
@@ -759,11 +747,6 @@ video {
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-}
-
-.py-8 {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
 }
 
 .py-4 {
