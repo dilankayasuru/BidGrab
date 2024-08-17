@@ -13,7 +13,7 @@
             <div class="sort-container">
                 <div class="relative">
                     <div class="inline-flex items-center cursor-pointer" id="sort-btn">
-                        <div class="rounded-full shadow-lg p-2 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 active:translate-y-0 active:shadow-lg">
+                        <div class="rounded-full shadow-lg p-2 hover:-translate-y-0.5 hover:shadow-xl transition-all duration-300 active:translate-y-0 active:shadow-lg">
                             <img src="https://img.icons8.com/ios-filled/50/sorting-arrows.png" alt="sorting-arrows" class="w-6 h-6"/>
                         </div>
                         <p class="px-2 py-2">
@@ -50,7 +50,7 @@
             <?php endfor; ?>
         </div>
         <div class="w-full grid place-items-center pt-16">
-            <button type="button" class="border border-blue rounded-md py-2 px-24 text-blue font-medium shadow-lg active:shadow-xl active:-translate-y-0 transition-all duration-300 hover:-translate-y-1">Load more</button>
+            <button type="button" class="border border-blue rounded-md py-2 px-24 text-blue font-medium shadow-lg active:shadow-xl active:-translate-y-0 transition-all duration-300 hover:-translate-y-0.5">Load more</button>
         </div>
     </div>
 <?php require "../components/footer.php"; ?>
