@@ -1,4 +1,4 @@
-<div class="product-card rounded-xl border border-blue-500 shadow-md p-2 min-w-64 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+<div class="product-card rounded-xl border border-blue-500 shadow-md p-2 min-w-64 w-full">
     <div class="product-image mb-2">
         <img src="public/images/shoe.jpg" alt="shoe image" class="w-full h-32 object-cover rounded-lg">
     </div>

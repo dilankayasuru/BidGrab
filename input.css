@@ -159,7 +159,7 @@
 }
 
 .promo-left-text {
-    @apply font-semibold text-lg;
+    @apply font-medium text-lg;
 }
 
 .promo-left-buttons-container {
