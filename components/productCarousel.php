@@ -4,7 +4,7 @@
         <i class="fa-solid fa-angle-left"></i>
     </div>
     <div class="product-carousel-container w-full overflow-hidden m-auto">
-        <div class="carousel transition-all duration-300 grid grid-flow-col auto-cols-[calc(100%_/_2_-_16px)] gap-4 py-4">
+        <div class="carousel transition-all duration-300 grid grid-flow-col auto-cols-[calc(100%_/_4_-_16px)] gap-4 py-4">
             <?php for ($i = 0; $i < 25; $i++) : ?>
                 <?php require "productCard.php"; ?>
             <?php endfor; ?>
