@@ -1,9 +1,9 @@
 <?php
-function redirectToHome() {
+function entryPoint() {
     header("Location: pages/home.php");
     exit();
 }
 
-// Call the function to redirect when index.php is loaded
-redirectToHome();
+// redirect when index.php is loaded
+entryPoint();
 ?>
