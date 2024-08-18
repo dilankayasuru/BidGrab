@@ -50,7 +50,7 @@
             <?php endfor; ?>
         </div>
         <div class="w-full grid place-items-center pt-16">
-            <button type="button" class="border border-blue rounded-md py-2 px-24 text-blue font-medium shadow-lg active:shadow-xl active:-translate-y-0 transition-all duration-300 hover:-translate-y-0.5">Load more</button>
+            <button type="button" class="bg-white border border-blue rounded-md py-2 px-24 text-blue font-medium shadow-lg active:shadow-xl active:-translate-y-0 transition-all duration-300 hover:-translate-y-0.5">Load more</button>
         </div>
     </div>
 <?php require "../components/footer.php"; ?>

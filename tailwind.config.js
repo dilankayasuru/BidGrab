@@ -16,8 +16,9 @@ module.exports = {
       'white': "#FFFFFF",
       'fadeWhite': "#F8F9F9",
       'green': "#07B149",
-      'yello': "#FE8F13",
-      "red": "#F46969"
+      'yellow': "#FE8F13",
+      "red": "#F46969",
+      "star": "#EBC351",
     },
     extend: {
       backgroundImage: {

@@ -1,4 +1,4 @@
-<div class="product-card rounded-xl border border-blue-500 shadow-md p-2 min-w-64 w-full">
+<div class="product-card rounded-xl border border-blue-500 shadow-md p-2 min-w-64 w-full bg-white">
     <div class="product-image mb-2">
         <img src="../public/images/shoe.jpg" alt="shoe image" class="w-full h-32 object-cover rounded-lg">
     </div>
@@ -17,6 +17,13 @@
         </div>
     </div>
     <div class="actionBtn">
-        <button type="button" class="primary-btn w-full">View Auction</button>
+        <button type="button" class="primary-btn w-full" onclick="redirect()">View Auction</button>
     </div>
 </div>
+
+<script>
+    //  Redirect on button click
+    function redirect() {
+        location.href = "productView.php"
+    }
+</script>
