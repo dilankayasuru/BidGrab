@@ -12,7 +12,8 @@ body {
 |
 ----------------------------------------------------------------------------------------------------------------------*/
 .navbar {
-    @apply flex justify-around items-center py-3 shadow-lg;
+    @apply flex justify-around items-center py-3 shadow-lg sticky top-0 bg-white z-20;
+    @apply md:hidden;
 }
 
 .navbar .logo a {
@@ -32,6 +33,10 @@ body {
     @apply bg-darkBlue px-5 py-2 rounded-3xl text-white hover:border-none after:content-none;
 }
 
+.active-mobile-nav div > * {
+    @apply text-blue;
+}
+
 .primary-btn {
     @apply bg-blue font-medium text-fadeWhite py-1 px-5 rounded-md;
     @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 hover:bg-blue-800;
@@ -44,7 +49,8 @@ body {
 |
 ----------------------------------------------------------------------------------------------------------------------*/
 .hero {
-    @apply w-full bg-hero-pattern bg-no-repeat bg-cover bg-bottom flex flex-col items-center justify-center gap-8 text-center py-16;
+    @apply w-full bg-hero-pattern bg-no-repeat bg-cover bg-bottom flex flex-col items-center justify-center gap-8 text-center py-16 px-4;
+    @apply md:pt-8;
 }
 
 .hero .text {
@@ -77,19 +83,22 @@ body {
 |
 ----------------------------------------------------------------------------------------------------------------------*/
 .main-footer {
-    @apply bg-footer-pattern bg-cover bg-top min-h-96 bg-no-repeat pt-32 flex flex-col justify-center items-center;
+    @apply bg-footer-pattern bg-cover bg-top min-h-96 bg-no-repeat pt-32 pb-24 flex flex-col justify-center items-center ps-[4vw] pe-[4vw];
 }
 
 .footer-container {
     @apply flex justify-between max-w-6xl w-full pb-4 border-b-fadeWhite border-b;
+    @apply sm:flex-col sm:justify-center sm:items-center;
 }
 
 .footer-left {
     @apply w-2/3;
+    @apply sm:w-full sm:flex sm:justify-center sm:items-center;
 }
 
 .footer-right {
     @apply flex justify-between w-1/3;
+    @apply sm:justify-around sm:w-full sm:mt-4;
 }
 
 .footer-item {
@@ -112,6 +121,10 @@ body {
     @apply relative pb-2 after:absolute after:transition-all after:duration-500 after:ease-in-out after:w-0 after:content-['_'] after:bg-fadeWhite after:h-0.5 after:m-auto after:left-0 after:bottom-0 hover:after:w-full;
 }
 
+.footerIcons {
+    @apply sm:flex sm:justify-center sm:items-center;
+}
+
 .footerIcons i {
     @apply text-2xl cursor-pointer mx-2;
 }
@@ -126,12 +139,14 @@ body {
 |
 ----------------------------------------------------------------------------------------------------------------------*/
 .categoryBox {
-    @apply lg:w-44 lg:h-44 bg-cover bg-center rounded-2xl shadow-md text-fadeWhite flex flex-col items-center justify-end py-4 px-2 bg-[linear-gradient(0deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.1)_80%),url('public/images/electroincs.jpg')] font-medium cursor-pointer;
+    @apply w-40 h-40 bg-cover bg-center rounded-2xl shadow-md text-fadeWhite flex flex-col items-center justify-end py-4 px-2 bg-[linear-gradient(0deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.1)_80%),url('public/images/electroincs.jpg')] font-medium cursor-pointer;
     @apply transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-md;
+    @apply xl:w-36 xl:h-36;
+    @apply sm:w-20 sm:h-20 sm:rounded-full;
 }
 
 .categories-section {
-    @apply lg:max-w-7xl m-auto py-8;
+    @apply max-w-7xl m-auto mb-16 mt-4 ps-[2vw] pe-[2vw];
 }
 
 .categories-section h1 {
@@ -140,6 +155,9 @@ body {
 
 .category-boxes-container {
     @apply grid grid-cols-6 place-items-center gap-4 w-fit m-auto;
+    @apply xl:grid-cols-5;
+    @apply lg:grid-cols-4;
+    @apply sm:grid-cols-3;
 }
 
 
@@ -150,11 +168,14 @@ body {
 |
 ----------------------------------------------------------------------------------------------------------------------*/
 .promotion-section {
-    @apply lg:max-w-7xl m-auto my-8 border-blue-500 border rounded-2xl flex justify-between items-center overflow-hidden;
+    @apply border-blue-500 border rounded-2xl flex justify-between items-center overflow-hidden;
+    @apply lg:flex-col;
 }
 
 .promotion-section .promo-left {
-    @apply w-1/3 px-8 *:mb-4; 
+    @apply w-1/3 px-8 *:mb-4;
+    @apply lg:w-full lg:py-8;
+    @apply lg:px-4;
 }
 
 .promo-left-title {
@@ -166,11 +187,12 @@ body {
 }
 
 .promo-left-buttons-container {
-    @apply pt-4 flex justify-start items-center gap-4;
+    @apply pt-4 flex justify-start items-center gap-2;
 }
 
 .promotion-section .promo-right {
     @apply bg-[url('public/images/sofa.jpg')] bg-cover bg-center w-2/3 h-80;
+    @apply lg:w-full;
 }
 
 /* -------------------------------------------------------------------------------------------------------------------

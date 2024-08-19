@@ -1,11 +1,11 @@
 <section class="w-full">
-    <div class="max-w-2xl">
+    <div class="max-w-2xl m-auto my-0">
         <div class="h-96 overflow-hidden shadow-md rounded-lg object-cover">
             <img id="main-image" src="../public/images/iphone.jpeg" alt="iphone main image"
                  class="w-full h-full object-cover">
         </div>
         <div class="relative">
-            <div class="product-carousel-btn prev-btn -translate-y-1/2 active:-translate-y-1/3 active:shadow-sm transition-all duration-300 w-11 h-11 absolute top-1/2 -left-4 bg-fadeWhite text-2xl cursor-pointer rounded-full shadow-md z-10 flex justify-center items-center">
+            <div class="product-carousel-btn prev-btn -translate-y-1/2 active:-translate-y-1/3 active:shadow-sm transition-all duration-300 w-11 h-11 absolute top-1/2 left-0 bg-fadeWhite text-2xl cursor-pointer rounded-full shadow-md z-10 flex justify-center items-center">
                 <i class="fa-solid fa-angle-left"></i>
             </div>
 
@@ -20,7 +20,7 @@
                 </div>
             </div>
 
-            <div class="product-carousel-btn next-btn -translate-y-1/2 active:-translate-y-1/3 active:shadow-sm transition-all duration-300 w-11 h-11 absolute top-1/2 -right-4 bg-fadeWhite text-2xl cursor-pointer rounded-full shadow-md z-10 flex justify-center items-center">
+            <div class="product-carousel-btn next-btn -translate-y-1/2 active:-translate-y-1/3 active:shadow-sm transition-all duration-300 w-11 h-11 absolute top-1/2 right-0 bg-fadeWhite text-2xl cursor-pointer rounded-full shadow-md z-10 flex justify-center items-center">
                 <i class="fa-solid fa-angle-right"></i>
             </div>
         </div>

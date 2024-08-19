@@ -1,5 +1,5 @@
-<section class="w-full">
-    <div class="border-b border-gray grid grid-flow-row gap-4 pb-4 mb-4">
+<section class="w-full lg:mb-16">
+    <div class="border-b border-gray grid grid-flow-row gap-4 pb-4 mb-4 lg:mb-8">
         <div>
             <p class="text-2xl font-bold">Vintage 1985 Air Jordan 1 - Red</p>
             <p class="text-gray">Shoes</p>
@@ -15,16 +15,16 @@
                 <p class="text-gray">Ends in: 17/10/2024</p>
             </div>
         </div>
-        <div class="flex items-center justify-center gap-6">
+        <div class="flex items-center justify-center gap-6 w-full">
             <div class="minus-btn bg-white w-11 h-11 grid items-center justify-center rounded-lg shadow-md border border-blue-500 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md duration-300 transition-all cursor-pointer">
                 <i class="fa-solid fa-minus"></i>
             </div>
             <div>
                 <label for="bidAmount" class="sr-only">Bid Amount</label>
                 <div class="flex justify-center items-center">
-                    <span class="text-2xl">Rs. </span>
+                    <span class="">Rs. </span>
                     <input type="number"
-                           class="border-b text-2xl font-bold text-center bg-fadeWhite focus:outline-none active:outline-none"
+                           class="border-b font-bold text-center bg-fadeWhite focus:outline-none active:outline-none"
                            value="11000.00" id="bidAmount">
                 </div>
 
@@ -33,7 +33,7 @@
                 <i class="fa-solid fa-plus"></i>
             </div>
         </div>
-        <button class="w-full grid items-center justify-center py-4 bg-blue text-white rounded-lg hover:shadow-lg hover:-translate-y-0.5 active:shadow-md active:translate-y-0 transition-all duration-300 font-medium">
+        <button class=" w-full grid items-center justify-center py-4 bg-blue text-white rounded-lg hover:shadow-lg hover:-translate-y-0.5 active:shadow-md active:translate-y-0 transition-all duration-300 font-medium">
             Place Bid
         </button>
     </div>
