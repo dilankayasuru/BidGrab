@@ -11,7 +11,7 @@ module.exports = {
     },
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
-      serif: ['Merriweather', 'serif'],
+      serif: ['Roboto', 'serif'],
     },
     colors: {
       'blue': '#3D63DD',
