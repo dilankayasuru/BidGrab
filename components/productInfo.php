@@ -22,9 +22,9 @@
             <div>
                 <label for="bidAmount" class="sr-only">Bid Amount</label>
                 <div class="flex justify-center items-center">
-                    <span class="">Rs. </span>
+                    <span class="text-2xl">Rs. </span>
                     <input type="number"
-                           class="border-b font-bold text-center bg-fadeWhite focus:outline-none active:outline-none"
+                           class="border-b font-bold text-center text-2xl lg:w-44 sm:w-36 bg-fadeWhite focus:outline-none active:outline-none"
                            value="11000.00" id="bidAmount">
                 </div>
 

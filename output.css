@@ -966,6 +966,11 @@ video {
   line-height: 1.25rem;
 }
 
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -1754,6 +1759,14 @@ body {
     display: block;
   }
 
+  .lg\:w-11 {
+    width: 2.75rem;
+  }
+
+  .lg\:w-44 {
+    width: 11rem;
+  }
+
   .lg\:auto-cols-\[calc\(100\%_\/_3_-_16px\)\] {
     grid-auto-columns: calc(100% / 3 - 16px);
   }
@@ -1800,6 +1813,14 @@ body {
 
   .sm\:hidden {
     display: none;
+  }
+
+  .sm\:w-3 {
+    width: 0.75rem;
+  }
+
+  .sm\:w-36 {
+    width: 9rem;
   }
 
   .sm\:auto-cols-\[calc\(100\%_\/_1_-_16px\)\] {
