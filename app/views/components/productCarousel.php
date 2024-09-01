@@ -1,4 +1,4 @@
-<section class="product-carousel m-auto mt-8 mb-16 max-w-7xl w-full relative ps-[2vw] pe-[2vw]">
+<section class="product-carousel m-auto mt-8 mb-16 max-w-7xl w-full relative">
     <h1 class="text-2xl font-medium mb-2">Recently Added Auctions</h1>
     <div class="carousel-btn prev-btn active:translate-y-1 active:shadow-sm transition-all duration-300 w-11 h-11 absolute top-1/2 left-0 bg-fadeWhite text-2xl cursor-pointer rounded-full shadow-md z-10 flex justify-center items-center">
         <i class="fa-solid fa-angle-left"></i>

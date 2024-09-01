@@ -1,7 +1,7 @@
 <div class="flex gap-4 justify-between items-center">
     <div class="flex gap-2 justify-between items-center">
         <div class="w-14 h-14 object-cover overflow-hidden border-blue-500 border shadow-md rounded-full">
-            <img src="../public/images/avatar.jpg" alt="seller pic" class="w-full h-full">
+            <img src="../../../public/images/avatar.jpg" alt="seller pic" class="w-full h-full">
         </div>
         <div>
             <p class="text-gray">Stephen John</p>

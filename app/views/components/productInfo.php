@@ -41,7 +41,7 @@
         <p class="font-bold text-lg">Description</p>
         <div class="flex gap-4 items-center">
             <p class="text-gray">Seller:</p>
-            <?php require "../components/sellerBadge.php" ?>
+            <?php require "../app/views/components/sellerBadge.php" ?>
         </div>
         <p class="text-gray">Condition: <span class="text-black">Used</span></p>
         <p>DStep back in time with these iconic Vintage 1985 Air Jordan 1 sneakers in a bold red colorway. A true

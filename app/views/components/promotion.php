@@ -1,4 +1,4 @@
-<section class="max-w-7xl m-auto my-8 ps-[2vw] pe-[2vw]">
+<section class="max-w-7xl m-auto">
     <div class="promotion-section">
         <div class="promo-left">
             <div class="promo-left-title">
