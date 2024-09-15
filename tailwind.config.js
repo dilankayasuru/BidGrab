@@ -1,9 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
-        './public/index.php',
-        './app/views/pages/**/*.{html,js,php}',
-        './app/views/components/**/*.{html,js,php}'
+        './public/**/*.{html,js,php}',
+        './app/views/**/*.{html,js,php}',
     ],
     theme: {
         screens: {
@@ -25,6 +24,7 @@ module.exports = {
             'black': "#1E1E1E",
             'gray': "#8B8D98",
             'white': "#FFFFFF",
+            'white-15': "#FFFFFF15",
             'fadeWhite': "#F8F9F9",
             'green': "#07B149",
             'yellow': "#FE8F13",

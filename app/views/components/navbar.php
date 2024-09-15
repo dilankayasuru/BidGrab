@@ -1,14 +1,19 @@
 <nav class="navbar">
     <div class="logo">
-        <a href="home.php">BidGarb</a>
+        <a href="/bidgrab/public/">BidGarb</a>
     </div>
     <ul>
-        <li><a href="home.php" class="nav-links">Home</a></li>
-        <li><a href="products.php" class="nav-links">Products</a></li>
-        <li><a href="#categories" class="nav-links">Categories</a></li>
-        <li><a href="#contact" class="nav-links">Contact</a></li>
+        <li><a href="/bidgrab/public/" class="nav-links">Home</a></li>
+        <li><a href="/bidgrab/public/products" class="nav-links">Products</a></li>
+        <li><a href="/bidgrab/public/categories" class="nav-links">Categories</a></li>
+        <li><a href="/bidgrab/public/contact" class="nav-links">Contact</a></li>
     </ul>
-    <?php require_once "signInBtn.php"; ?>
+    <?php if (isset($_SESSION["user"])) : ?>
+        <?php require_once "userMenu.php"; ?>
+    <?php else: ?>
+        <?php require_once "signInBtn.php"; ?>
+    <?php endif; ?>
+
 </nav>
 
 <div class="mobile-nav md:block hidden">
@@ -17,13 +22,13 @@
     </div>
     <nav class="px-4 fixed bottom-0 bg-white w-full z-20 shadow-[0_-5px_15px_rgb(0,0,0,0.15)]">
         <ul class="flex justify-around gap-4 items-center mobile-nav-list">
-            <li class="py-4"><a href="home.php">
+            <li class="py-4"><a href="./">
                     <div class="flex-col flex justify-center items-center gap-2">
                         <i class="fa-solid fa-house text-gray text-2xl"></i>
                         <p class="text-gray">Home</p>
                     </div>
                 </a></li>
-            <li><a href="products.php">
+            <li><a href="products">
                     <div class="flex-col flex justify-center items-center gap-2">
                         <i class="fa-solid fa-box text-gray text-2xl"></i>
                         <p class="text-gray">Products</p>
@@ -66,10 +71,8 @@
         Array.from(mobileNavLinks).forEach(link => {
             if (link.childNodes[0].href === window.location.href) {
                 link.childNodes[0].classList.add('active-mobile-nav');
-                console.log('SSS')
-            }else {
+            } else {
                 link.classList.remove('active-mobile-nav');
-                console.log('nnn')
             }
         })
     })

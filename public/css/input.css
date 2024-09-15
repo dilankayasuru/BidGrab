@@ -16,6 +16,10 @@ body {
     @apply md:hidden;
 }
 
+.navbar.auth {
+    @apply justify-start ps-[7vw] pe-[7vw] md:block;
+}
+
 .navbar .logo a {
     @apply font-extrabold text-2xl text-blue;
 }
@@ -139,7 +143,7 @@ body {
 |
 ----------------------------------------------------------------------------------------------------------------------*/
 .categoryBox {
-    @apply w-40 h-40 bg-cover bg-center rounded-2xl shadow-md text-fadeWhite flex flex-col items-center justify-end py-4 px-2 bg-[linear-gradient(0deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.1)_80%),url('public/images/electroincs.jpg')] font-medium cursor-pointer;
+    @apply w-40 h-40 bg-cover bg-center rounded-2xl shadow-md text-fadeWhite flex flex-col items-center justify-end py-4 px-2 bg-[linear-gradient(0deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.1)_80%),url('../../public/images/electroincs.jpg')] font-medium cursor-pointer;
     @apply transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-md;
     @apply xl:w-36 xl:h-36;
     @apply sm:w-20 sm:h-20 sm:rounded-full;
@@ -191,7 +195,7 @@ body {
 }
 
 .promotion-section .promo-right {
-    @apply bg-[url('public/images/sofa.jpg')] bg-cover bg-center w-2/3 h-80;
+    @apply bg-[url('../../public/images/sofa.jpg')] bg-cover bg-center w-2/3 h-80;
     @apply lg:w-full;
 }
 
@@ -204,4 +208,17 @@ body {
     @apply bg-white border-blue border text-blue py-1 px-5 rounded-md font-medium;
     @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
     @apply active:shadow-md active:translate-y-0;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------
+|
+|   Dashboard styles
+|
+----------------------------------------------------------------------------------------------------------------------*/
+.dashboard-filter-button {
+    @apply rounded-xl px-4 py-1 border-blue-500 border;
+}
+
+.create-auction-btn {
+    @apply animate-bounce hover:animate-none text-white bg-blue rounded-md px-4 py-2 absolute bottom-0 right-0 mb-8 mr-8 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-lg transition-all duration-300;
 }

@@ -1,7 +1,7 @@
 <section class="w-full">
     <div class="max-w-2xl m-auto my-0">
         <div class="h-96 overflow-hidden shadow-md rounded-lg object-cover">
-            <img id="main-image" src="../../../public/images/iphone.jpeg" alt="iphone main image"
+            <img id="main-image" src="/bidgrab/public/images/iphone.jpeg" alt="iphone main image"
                  class="w-full h-full object-cover">
         </div>
         <div class="relative">
@@ -13,7 +13,7 @@
                 <div class="image-carousel transition-all duration-300 ml-2 grid grid-flow-col auto-cols-[calc(100%_/_3_-_8px)] gap-2">
                     <?php for ($i = 0; $i < 5; $i++) : ?>
                         <div class="image-box cursor-pointer hover:opacity-70 transition-all duration-300 w-full max-h-48 shadow-md rounded-xl overflow-hidden my-4">
-                            <img src="../../../public/images/shoe.jpg" alt="iphone image"
+                            <img src="/bidgrab/public/images/shoe.jpg" alt="iphone image"
                                  class="w-full h-full object-cover">
                         </div>
                     <?php endfor; ?>

@@ -1,6 +1,6 @@
 <div class="product-card rounded-xl border border-blue-500 shadow-md p-2 w-full bg-white">
     <div class="product-image mb-2">
-        <img src="../../../public/images/shoe.jpg" alt="shoe image" class="w-full h-32 object-cover rounded-lg">
+        <img src="/bidgrab/public/images/shoe.jpg" alt="shoe image" class="w-full h-32 object-cover rounded-lg">
     </div>
     <div class="product-name mb-2">
         <p>Vintage 1985 Air Jordan 1 -R...</p>
@@ -24,6 +24,6 @@
 <script>
     //  Redirect on button click
     function redirect() {
-        location.href = "productView.php"
+        location.href = "product?id=16"
     }
 </script>
