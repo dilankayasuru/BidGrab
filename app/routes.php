@@ -17,6 +17,9 @@ return $routes = [
     'dashboard/add-new-auction' => ['controller' => 'ProductController', 'method' => 'addNew'],
     'dashboard/auctions' => ['controller' => 'ProductController', 'method' => 'getAllAuctions'],
 
+    'auction/delete' => ['controller' => 'ProductController', 'method' => 'deleteProduct'],
+    'dashboard/auction-edit' => ['controller' => 'ProductController', 'method' => 'editProduct'],
+
     'change-profile' => ['controller' => 'UserController', 'method' => 'changeProfile'],
     'reset-password' => ['controller' => 'UserController', 'method' => 'resetPassword'],
 ];

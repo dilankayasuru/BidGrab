@@ -52,4 +52,18 @@ class Auth extends Controller
         session_destroy();
         header("Location: login");
     }
+
+    public function authenticate($userId)
+    {
+        if ($_SESSION["user"]["user_id"] !== $userId) {
+            header("Location: login");
+        }
+    }
+
+    public function authorize($role)
+    {
+        if ($_SESSION["user"]["user_role"] !== $role) {
+            header("Location: login");
+        }
+    }
 }

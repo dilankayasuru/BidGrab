@@ -30,6 +30,7 @@ module.exports = {
             'yellow': "#FE8F13",
             "red": "#F46969",
             "star": "#EBC351",
+            "orange": "#FE8F13",
         },
         extend: {
             backgroundImage: {

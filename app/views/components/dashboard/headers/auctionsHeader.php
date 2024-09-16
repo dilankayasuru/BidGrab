@@ -25,17 +25,17 @@
             <div id="sort-menu" class="hidden absolute end-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white"
                  role="menu">
                 <div class="p-2">
-                    <p class="sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                    <a href="?filter=<?= $filter ?>&sort=default" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                         Default
-                    </p>
+                    </a>
 
-                    <p class="sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                    <a href="?filter=<?= $filter ?>&sort=latest" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                         Latest
-                    </p>
+                    </a>
 
-                    <p class="sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                    <a href="?filter=<?= $filter ?>&sort=old" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                         Old
-                    </p>
+                    </a>
                 </div>
             </div>
         </div>
@@ -44,16 +44,16 @@
 <div class="flex justify-between items-center mb-4">
     <div class="flex gap-2">
         <a href="?filter=all"
-           class="dashboard-filter-button <?= $_GET["filter"] == "all" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
+           class="dashboard-filter-button <?= $filter == 'all' ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
             All auctions</a>
         <a href="?filter=live"
-           class="dashboard-filter-button <?= $_GET["filter"] == "live" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
+           class="dashboard-filter-button <?= $filter == 'live' ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
             Live</a>
         <a href="?filter=pending"
-           class="dashboard-filter-button <?= $_GET["filter"] == "pending" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
+           class="dashboard-filter-button <?= $filter == 'pending' ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
             Pending</a>
         <a href="?filter=completed"
-           class="dashboard-filter-button <?= $_GET["filter"] == "completed" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
+           class="dashboard-filter-button <?= $filter == 'completed' ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
             Completed</a>
     </div>
     <div class="flex gap-2 items-center">
@@ -62,7 +62,7 @@
             <i class="fa-solid fa-chevron-left text-xl"></i>
         </a>
         <div>
-            <p>1 -3 of 3</p>
+            <p>1 -3 of <?= count($products) ?></p>
         </div>
         <a href="#next"
            class="shadow-md w-9 h-9 flex justify-center items-center rounded-full hover:shadow-lg active:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300">
@@ -72,7 +72,7 @@
 </div>
 
 <a href="/bidgrab/public/dashboard/add-new-auction"
-   class="create-auction-btn">
+   class="create-auction-btn z-10">
     <i class="fa-solid fa-plus text-xl"></i>
     <span class="pl-2">Create new auction</span>
 </a>

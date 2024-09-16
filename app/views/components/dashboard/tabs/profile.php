@@ -1,11 +1,11 @@
 <div class="grid place-items-center">
-    <form action="../change-profile" method="POST" class="grid place-items-center py-4 w-fit">
+    <form action="/bidgrab/public/change-profile" enctype="multipart/form-data" method="POST" class="grid place-items-center py-4 w-fit">
         <div class="relative w-fit mb-4">
             <div class="w-32 h-32 rounded-full overflow-hidden border border-blue-500 shadow-xl">
-                <img src="/bidgrab/public/images/profile.png" alt="upload image" class="w-full h-full object-cover"
+                <img src="<?=FileHandler::getProfilePic()?>" alt="upload image" class="w-full h-full object-cover"
                      id="profile-image-preview">
             </div>
-            <input type="file" accept=".jpg, .jpeg, .png" name="profile-pic" id="profile-image-input" class="hidden">
+            <input type="file" accept=".jpg, .jpeg, .png, .webp" name="profile-pic" id="profile-image-input" class="hidden">
             <label for="profile-image-input"
                    class="cursor-pointer bg-blue py-1 px-1 w-9 h-9 rounded-full flex justify-center items-center absolute bottom-0 right-0">
                 <i class="fa-solid fa-pen-to-square text-white"></i>

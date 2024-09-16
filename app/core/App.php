@@ -1,8 +1,8 @@
 <?php
-
+require_once "FileHandler.php";
 class App
 {
-    protected $controller = 'BookController';
+    protected $controller = 'HomeController';
 
     protected $method = 'index';
 

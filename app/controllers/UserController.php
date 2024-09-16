@@ -5,9 +5,12 @@ class UserController extends Controller
 {
     public function changeProfile()
     {
-        $userModel = $this->loadModel("User");
-        $userModel->changeProfile();
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $userModel = $this->loadModel("User");
+            $userModel->changeProfile();
+        }
     }
+
     public function resetPassword()
     {
         $userModel = $this->loadModel("User");

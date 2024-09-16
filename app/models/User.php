@@ -1,9 +1,11 @@
 <?php
 require_once "../app/core/Database.php";
+require_once "../app/core/FileHandler.php";
 
 class User
 {
     private $db;
+    private $profilePic;
 
     public function __construct()
     {
@@ -51,7 +53,6 @@ class User
             $this->db->rollBack();
             echo "Failed: " . $e->getMessage();
         }
-
     }
 
     public function login($email, $password)
@@ -83,6 +84,7 @@ class User
 
     public function changeProfile()
     {
+
         $firstName = $_POST["first-name"] ?? $_SESSION["user"]["first_name"];
         $lastName = $_POST["last-name"] ?? $_SESSION["user"]["last_name"];
         $email = $_POST["email"] ?? $_SESSION["user"]["email"];
@@ -92,6 +94,13 @@ class User
         $city = $_POST["city"] ?? $_SESSION["user"]["city"];
         $district = $_POST["district"] ?? $_SESSION["user"]["district"];
         $province = $_POST["province"] ?? $_SESSION["user"]["province"];
+
+        $this->profilePic = $_SESSION["user"]["profile_pic"];
+
+        if (is_uploaded_file($_FILES["profile-pic"]['tmp_name'])) {
+            $fileHandler = new FileHandler("profile-pic");
+            $this->profilePic = $fileHandler->uploadFile("user".$_SESSION["user"]["user_id"], "profileImages");
+        }
 
         try {
             $this->db->beginTransaction();
@@ -106,7 +115,8 @@ class User
                         street=:street,
                         city=:city,
                         district=:district,
-                        province=:province
+                        province=:province,
+                        profile_pic=:profilePic
                     WHERE user_id=:userId
                         ");
             $this->db->bind(':fName', $firstName);
@@ -118,6 +128,7 @@ class User
             $this->db->bind(':city', $city);
             $this->db->bind(':district', $district);
             $this->db->bind(':province', $province);
+            $this->db->bind(':profilePic', $this->profilePic);
             $this->db->bind(':userId', $_SESSION["user"]["user_id"]);
             $this->db->execute();
 
@@ -125,7 +136,6 @@ class User
             $this->db->bind(':UserID', $_SESSION["user"]["user_id"]);
             $this->db->execute();
 
-            session_start();
             $_SESSION["user"] = $this->db->result();
 
             $this->db->commitTransaction();
@@ -135,7 +145,6 @@ class User
         } catch (Exception $e) {
             $this->db->rollBack();
             echo "Failed: " . $e->getMessage();
-//            header("Location: error/on/sql");
         }
     }
 
@@ -160,8 +169,6 @@ class User
             echo "Incorrect";
             return;
         }
-
-        echo "$currentPassword $newPassword $confirmPassword";
 
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 

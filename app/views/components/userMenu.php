@@ -1,9 +1,9 @@
 <div>
     <div class="relative">
         <div class="inline-flex items-center cursor-pointer" id="profile-menu-icon">
-            <div class="w-8 h-8 rounded-full shadow-lg">
-                <img src="/bidgrab/public/images/profile.png" alt="sorting-arrows"
-                     class="w-full h-full"/>
+            <div class="w-8 h-8 rounded-full shadow-lg overflow-hidden">
+                <img src="<?=FileHandler::getProfilePic()?>" alt="profile pic"
+                     class="w-full h-full object-cover"/>
             </div>
             <p class="px-2 py-2">
                 <i class="fa-solid fa-chevron-down"></i>

@@ -43,17 +43,17 @@
 </div>
 <div class="flex justify-between items-center mb-4">
     <div class="flex gap-2">
-        <a href="#dashboard/auctions?tab=auctions&filter=all"
-           class="dashboard-filter-button <?= $_GET["tab"] == "auctions" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
+        <a href="?filter=all"
+           class="dashboard-filter-button <?= $filter == "all" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
             All orders</a>
-        <a href="#live"
-           class="dashboard-filter-button <?= $_GET["tab"] == "live" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
+        <a href="?filter=pending"
+           class="dashboard-filter-button <?= $filter == "pending" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
             Pending</a>
-        <a href="#pending"
-           class="dashboard-filter-button <?= $_GET["tab"] == "pending" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
+        <a href="?filter=completed"
+           class="dashboard-filter-button <?= $filter == "completed" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
             Completed</a>
-        <a href="#completed"
-           class="dashboard-filter-button <?= $_GET["tab"] == "completed" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
+        <a href="?filter=canceled"
+           class="dashboard-filter-button <?= $filter == "canceled" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
             Canceled</a>
     </div>
     <div class="flex gap-2 items-center">

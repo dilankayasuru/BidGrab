@@ -7,6 +7,7 @@ class ProductController extends Controller
 
     public function index()
     {
+
         $this->renderView("pages/products");
     }
 
@@ -76,10 +77,15 @@ class ProductController extends Controller
         }
 
         $categoryModel = $this->loadModel("Category");
-        $this->renderView("pages/adminDashboard", ["tab" => "createNewAuction", "categories" => $categoryModel->getAllCategories()]);
+
+        if ($_SESSION["user"]["user_role"] == "user") {
+            $this->renderView("pages/userDashboard", ["tab" => "createNewAuction", "categories" => $categoryModel->getAllCategories()]);
+        } else {
+            header("Location: /bidgrab/public/dashboard");
+        }
     }
 
-    public function getAllAuctions($filter = "all")
+    public function getAllAuctions($filter = "all", $sort = "default")
     {
         if (!isset($_SESSION["user"])) {
             header("Location: login");
@@ -88,11 +94,46 @@ class ProductController extends Controller
 
         $this->productModel = $this->loadModel("Product");
 
+
         if ($_SESSION["user"]["user_role"] == "admin") {
-            $this->renderView("pages/adminDashboard", ["tab" => "auctions", "products" => $this->productModel->getAllAuctions("admin"), "filter" => $filter]);
+            $this->renderView("pages/adminDashboard", ["tab" => "auctions", "products" => $this->productModel->getAllAuctions("admin", $sort), "filter" => $filter, "sort" => $sort]);
         } else {
-            $this->renderView("pages/userDashboard", ["tab" => "auctions", "products" => $this->productModel->getAllAuctions("user"), "filter" => $filter]);
+            $this->renderView("pages/userDashboard", ["tab" => "auctions", "products" => $this->productModel->getAllAuctions("user", $sort), "filter" => $filter, "sort" => $sort]);
         }
 
+    }
+
+    public function deleteProduct($id)
+    {
+        $this->productModel = $this->loadModel("Product");
+        $this->productModel->deleteProduct($id);
+    }
+
+    public function editProduct($id)
+    {
+        $this->productModel = $this->loadModel("Product");
+        $categoryModel = $this->loadModel("Category");
+        $itemImageModel = $this->loadModel("ItemImage");
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $description = $_POST["description"];
+            $productTitle = $_POST["auction-title"];
+            $category = $_POST["category"];
+            $condition = $_POST["condition"];
+            $startDate = $_POST["startDate"];
+            $endDate = $_POST["endDate"];
+            $startTime = $_POST["startTime"];
+            $endTime = $_POST["endTime"];
+            $basePrice = $_POST["basePrice"];
+
+            $this->productModel->editProduct($id, $productTitle, $description, $condition, $category, $startDate, $endDate, $startTime, $endTime, $basePrice);
+        }
+
+        $this->renderView("pages/userDashboard", [
+            "tab" => "createNewAuction",
+            "categories" => $categoryModel->getAllCategories(),
+            "images"=> $itemImageModel->getItemImages($id),
+            "product" => $this->productModel->getProduct($id)
+        ]);
     }
 }
