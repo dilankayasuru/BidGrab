@@ -10,9 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Track the state of the sort menu (opened or closed)
     let opened = false;
 
-    // Set the default sort option text
-    selectedSortHtml.innerText = "Default";
-
     // Add click event listener to the sort button
     sortBtn.addEventListener('click', () => {
         // Toggle the visibility of the sort menu
@@ -31,8 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
             // Hide the sort menu when an item is clicked
             sortMenu.classList.add('hidden');
             opened = false;
-            // Update the displayed sort option text
-            selectedSortHtml.innerText = item.innerText.trim();
         });
     });
 })

@@ -5,15 +5,47 @@ class ProductController extends Controller
 {
     private $productModel;
 
+    public function __construct()
+    {
+        $this->productModel = $this->loadModel("Product");
+    }
+
     public function index()
     {
+        $recentItems = $this->productModel->getRecentlyAddedAuctions();
+        $this->renderView("pages/home", ["recentItems" => $recentItems]);
+    }
 
-        $this->renderView("pages/products");
+    public function viewAllProducts($sort = "default", $category = "all")
+    {
+        $sortQuery = '';
+
+        if ($sort == "lowtohigh") {
+            $sortQuery = "current_price ASC";
+        } elseif ($sort == "hightolow") {
+            $sortQuery = "current_price DESC";
+        } elseif ($sort == "recent") {
+            $sortQuery = "date_added DESC";
+        }
+
+        $auctionCount = $this->productModel->getCountOfAuctions();
+        $displayAuction = $this->productModel->displayAuctions("all", $sortQuery);
+        $this->renderView("pages/products", ["count" => $auctionCount, "auctions" => $displayAuction, "sort" => $sort, "category" => $category]);
     }
 
     public function getProductById($id)
     {
-        $this->renderView("pages/productView", ['id' => $id], "View $id");
+        $recentItems = $this->productModel->getRecentlyAddedAuctions();
+        $product = $this->productModel->getProduct($id)["product"];
+        $images = $this->productModel->getProduct($id)["images"];
+        $seller = $this->productModel->getProduct($id)["seller"];
+        $this->renderView(
+            "pages/productView", [
+            "recentItems" => $recentItems,
+            "product" => $product,
+            "images" => $images,
+            "seller" => $seller
+        ]);
     }
 
     public function addNew()
@@ -63,7 +95,6 @@ class ProductController extends Controller
                 return;
             }
 
-            $this->productModel = $this->loadModel("Product");
             $this->productModel->addNew(
                 $productTitle,
                 $description,
@@ -92,8 +123,6 @@ class ProductController extends Controller
             return;
         }
 
-        $this->productModel = $this->loadModel("Product");
-
 
         if ($_SESSION["user"]["user_role"] == "admin") {
             $this->renderView("pages/adminDashboard", ["tab" => "auctions", "products" => $this->productModel->getAllAuctions("admin", $sort), "filter" => $filter, "sort" => $sort]);
@@ -105,7 +134,6 @@ class ProductController extends Controller
 
     public function deleteProduct($id)
     {
-        $this->productModel = $this->loadModel("Product");
         $this->productModel->deleteProduct($id);
     }
 
@@ -132,8 +160,8 @@ class ProductController extends Controller
         $this->renderView("pages/userDashboard", [
             "tab" => "createNewAuction",
             "categories" => $categoryModel->getAllCategories(),
-            "images"=> $itemImageModel->getItemImages($id),
-            "product" => $this->productModel->getProduct($id)
+            "images" => $this->productModel->getProduct($id)["images"],
+            "product" => $this->productModel->getProduct($id)["product"]
         ]);
     }
 }

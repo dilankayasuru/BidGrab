@@ -1,18 +1,19 @@
 <section class="w-full lg:mb-16">
     <div class="border-b border-gray grid grid-flow-row gap-4 pb-4 mb-4 lg:mb-8">
         <div>
-            <p class="text-2xl font-bold">Vintage 1985 Air Jordan 1 - Red</p>
-            <p class="text-gray">Shoes</p>
+            <p class="text-2xl font-bold"><?=$product["title"]?></p>
+            <p class="text-gray"><?=$product["category"]?></p>
         </div>
         <div>
-            <p class="text-gray">Current Bid: <span class="text-2xl text-black font-bold">Rs. 10900.00</span></p>
+            <p class="text-gray">Current Bid: <span class="text-2xl text-black font-bold"><?=$product["current_price"]?></span></p>
         </div>
         <div class="flex gap-4">
             <div class="border border-blue-500 px-4 py-1 rounded-lg">
                 <p class="text-gray">50 Bids</p>
             </div>
             <div class="border border-blue-500 px-4 py-1 rounded-lg">
-                <p class="text-gray">Ends in: 17/10/2024</p>
+                <p class="text-gray">Ends in: <span id="time-remaining"></span></p>
+<!--                --><?php //=date("d/m/Y",strtotime($product["end_date"]))?>
             </div>
         </div>
         <div class="flex items-center justify-center gap-6 w-full">
@@ -25,7 +26,7 @@
                     <span class="text-2xl">Rs. </span>
                     <input type="number"
                            class="border-b font-bold text-center text-2xl lg:w-44 sm:w-36 bg-fadeWhite focus:outline-none active:outline-none"
-                           value="11000.00" id="bidAmount">
+                           value="<?=$product["current_price"]+500?>" id="bidAmount">
                 </div>
 
             </div>
@@ -43,15 +44,15 @@
             <p class="text-gray">Seller:</p>
             <?php require "../app/views/components/sellerBadge.php" ?>
         </div>
-        <p class="text-gray">Condition: <span class="text-black">Used</span></p>
-        <p>DStep back in time with these iconic Vintage 1985 Air Jordan 1 sneakers in a bold red colorway. A true
-            collector's item, these sneakers are a piece of basketball history, representing the original release of
-            Michael Jordan's first signature shoe. The shoes feature the classic high-top design, premium leather
-            construction, and the timeless "Wings" logo on the collar. Whether you're a sneakerhead or a sports
-            memorabilia enthusiast, these Jordans offer unmatched style and nostalgia. Please note that due to their
-            vintage nature, these sneakers may show signs of wear, adding to their unique character.</p>
+        <p class="text-gray">Condition: <span class="text-black"><?=$product["product_condition"]?></span></p>
+        <p><?=$product["description"]?></p>
     </div>
 </section>
+
+<?php
+$endTime = new DateTime($product["end_date"]." ".$product["end_time"]);
+$endTimeTimeStamp = $endTime->getTimestamp();
+?>
 
 <script>
 
@@ -71,7 +72,7 @@
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
             // If the button is a minus button and the bid amount is greater than the current bid + 500
-            if (btn.classList.contains('minus-btn') && bidAmount > currentBid + 500) {
+            if (btn.classList.contains('minus-btn') && bidAmount > currentBid) {
                 // Decrease the bid amount by 500
                 bidAmount -= 500.00;
             }
@@ -91,5 +92,26 @@
             e.target.value = currentBid;
         }
     })
+
+    function showRemainingTime() {
+        let endTimeTimeStamp = <?=$endTimeTimeStamp * 1000?>;
+        let differance = endTimeTimeStamp - new Date().getTime();
+
+        let days = Math.floor(differance / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((differance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let mins = Math.floor((differance % (1000 * 60 * 60)) / (1000 * 60))
+        let secs = Math.floor((differance % (1000 * 60)) / 1000);
+
+        document.getElementById("time-remaining").innerHTML = days + "d " + hours + "h " + mins + "m " + secs + "s left";
+        document.getElementById("time-remaining").innerHTML = `${days > 0 ? days +"d" : ''} ${hours > 0 ? hours +"h" : ''} ${mins > 0 ? mins +"m" : ''} ${secs > 0 ? secs +"s" : ''} left`;
+
+        // If the countdown is over, display an expiration message
+        if (differance < 0) {
+            clearInterval(remainingTimeInterval);
+            document.getElementById("time-remaining").innerHTML = "Expired!";
+        }
+    }
+
+    const remainingTimeInterval = setInterval(showRemainingTime, 1000);
 
 </script>

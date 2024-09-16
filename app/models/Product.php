@@ -50,11 +50,29 @@ class Product
         }
     }
 
+    public function getRecentlyAddedAuctions()
+    {
+        $this->db->beginTransaction();
+
+        $query = "
+SELECT auction_item.*, item_image.image, category.name as category 
+FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.image 
+    LEFT JOIN category on category.category_id=auction_item.category_id GROUP BY auction_item.auction_id ORDER by auction_item.date_added DESC LIMIT 10";
+
+        $this->db->query($query);
+
+        $this->db->execute();
+
+        $this->db->commitTransaction();
+
+        return $this->db->results();
+    }
+
     public function getAllAuctions($role, $sort)
     {
         $this->db->beginTransaction();
 
-        $orderBy = $sort == "latest" ? "ORDER BY date_added DESC" : ($sort == "old" ? "ORDER BY date_added DESC" : "");
+        $orderBy = $sort == "latest" ? "ORDER BY date_added DESC" : ($sort == "old" ? "ORDER BY date_added ASC" : "");
 
         $query = "
 SELECT auction_item.*, item_image.image, category.name as category 
@@ -62,9 +80,9 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
     LEFT JOIN category on category.category_id=auction_item.category_id";
 
         if ($role == "user") {
-            $query = $query." WHERE auction_item.seller_id=:userId GROUP BY auction_item.auction_id $orderBy";
-        }else {
-            $query = $query." GROUP BY auction_item.auction_id ".$orderBy;
+            $query = $query . " WHERE auction_item.seller_id=:userId GROUP BY auction_item.auction_id $orderBy";
+        } else {
+            $query = $query . " GROUP BY auction_item.auction_id " . $orderBy;
         }
 
         $this->db->query($query);
@@ -129,12 +147,31 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
         }
     }
 
-    public function getProduct($id)
+    public function getProduct($id): array
     {
+        $this->db->beginTransaction();
+
         $this->db->query("SELECT *, (SELECT name FROM category WHERE category_id=auction_item.category_id) as category FROM auction_item WHERE auction_id=:auctionId");
         $this->db->bind(':auctionId', $id);
         $this->db->execute();
-        return $this->db->result();
+
+        $product = $this->db->result();
+
+        $this->db->query("SELECT image FROM item_image WHERE auction_id=:auctionId");
+        $this->db->bind(':auctionId', $id);
+        $this->db->execute();
+
+        $images = $this->db->results();
+
+        $this->db->query("SELECT first_name, last_name, rating_count as rating, profile_pic FROM users WHERE user_id=:id");
+        $this->db->bind(':id', $product["seller_id"]);
+        $this->db->execute();
+
+        $seller = $this->db->result();
+
+        $this->db->commitTransaction();
+
+        return ["product" => $product, "images" => $images, "seller" => $seller];
     }
 
     public function editProduct(
@@ -187,5 +224,49 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
             $this->db->rollback();
             echo $e->getMessage();
         }
+    }
+
+    public function getCountOfAuctions()
+    {
+        $this->db->beginTransaction();
+        $this->db->query("SELECT COUNT(auction_id) as auctionCount FROM auction_item");
+        $this->db->execute();
+        $this->db->commitTransaction();
+        return $this->db->result();
+    }
+
+    public function displayAuctions($category = "all", $sort = '')
+    {
+        $this->db->beginTransaction();
+
+        if ($category !== "all") {
+            $categoryQuery = ' WHERE category.category_id=:categoryId';
+        }
+        else {
+            $categoryQuery = '';
+        }
+
+        $sortQuery = '';
+
+        if ($sort !== '') {
+            $sortQuery = 'ORDER by auction_item.'.$sort;
+        }
+
+        $query = "
+SELECT auction_item.*, item_image.image, category.name as category 
+FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.image 
+    LEFT JOIN category on category.category_id=auction_item.category_id$categoryQuery GROUP BY auction_item.auction_id $sortQuery";
+
+        $this->db->query($query);
+
+        if ($category !== "all") {
+            $this->db->bind(':categoryId', $category);
+        }
+
+        $this->db->execute();
+
+        $this->db->commitTransaction();
+
+        return $this->db->results();
     }
 }

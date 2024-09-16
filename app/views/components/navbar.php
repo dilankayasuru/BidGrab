@@ -60,7 +60,7 @@
         // Loop through each navigation link
         navLinks.forEach(link => {
             // Check if the link matches the current page link
-            if (link.href === window.location.href) {
+            if (link.href.split('?')[0] === window.location.href.split('?')[0]) {
                 // Add 'active' class to the matching link
                 link.classList.add('active')
             } else {
@@ -69,7 +69,7 @@
             }
         })
         Array.from(mobileNavLinks).forEach(link => {
-            if (link.childNodes[0].href === window.location.href) {
+            if (link.childNodes[0].href === window.location.href.split('?')[0]) {
                 link.childNodes[0].classList.add('active-mobile-nav');
             } else {
                 link.classList.remove('active-mobile-nav');

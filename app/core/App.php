@@ -2,10 +2,8 @@
 require_once "FileHandler.php";
 class App
 {
-    protected $controller = 'HomeController';
-
+    protected $controller = 'ProductController';
     protected $method = 'index';
-
     protected array $params = [];
 
     public function __construct()

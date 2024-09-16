@@ -1,8 +1,8 @@
 <?php
 
 return $routes = [
-    '' => ['controller' => 'HomeController', 'method' => 'index'],
-    'products' => ['controller' => 'ProductController', 'method' => 'index'],
+    '' => ['controller' => 'ProductController', 'method' => 'index'],
+    'products' => ['controller' => 'ProductController', 'method' => 'viewAllProducts'],
     'product' => ['controller' => 'ProductController', 'method' => 'getProductById'],
     'login' => ['controller' => 'Auth', 'method' => 'login'],
     'register' => ['controller' => 'Auth', 'method' => 'register'],

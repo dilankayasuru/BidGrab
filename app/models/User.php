@@ -12,14 +12,6 @@ class User
         $this->db = new Database();
     }
 
-    private function getUserCredentials($email)
-    {
-        $this->db->query("SELECT email password FROM users WHERE email=:email");
-        $this->db->bind(':email', $email);
-        $this->db->execute();
-        return $this->db->result();
-    }
-
     public function registerUser($firstName, $lastName, $email, $password)
     {
         try {

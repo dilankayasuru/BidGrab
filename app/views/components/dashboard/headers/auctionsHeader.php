@@ -18,7 +18,7 @@
                          class="w-6 h-6"/>
                 </div>
                 <p class="px-2 py-2">
-                    Sort By: <span id="selected-sort"></span>
+                    Sort By: <span id="selected-sort"><?=ucfirst($sort)?></span>
                 </p>
             </div>
 

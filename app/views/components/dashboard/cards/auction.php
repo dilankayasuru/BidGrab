@@ -22,7 +22,7 @@
             <div class="grid grid-cols-4 gap-8 mb-4">
                 <div>
                     <p class="text-gray">Date Added</p>
-                    <p><?= $product["date_added"]; ?></p>
+                    <p><?= date( "Y-m-d" ,strtotime($product["date_added"])); ?></p>
                 </div>
                 <div>
                     <p class="text-gray">Auction ID</p>

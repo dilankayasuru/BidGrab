@@ -16,37 +16,54 @@
                              class="w-6 h-6"/>
                     </div>
                     <p class="px-2 py-2">
-                        Sort By: <span id="selected-sort"></span>
+                        Sort By: <span id="selected-sort">
+                            <?php
+                            $sortLabel = "";
+                            if ($sort == "default") {
+                                $sortLabel = "Default";
+                            }
+                            elseif ($sort == "lowtohigh") {
+                                $sortLabel = "Price low to high";
+                            }
+                            elseif ($sort == "hightolow") {
+                                $sortLabel = "Price high to low";
+                            }
+                            elseif ($sort == "recent") {
+                                $sortLabel = "Recently added";
+                            }
+                            ?>
+                            <?=$sortLabel?>
+                        </span>
                     </p>
                 </div>
 
                 <div id="sort-menu" class="hidden absolute end-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white"
                      role="menu">
                     <div class="p-2">
-                        <p class="sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                        <a href="?sort=default" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                             Default
-                        </p>
+                        </a>
 
-                        <p class="sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                        <a href="?sort=lowtohigh" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                             Price low to high
-                        </p>
+                        </a>
 
-                        <p class="sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                        <a href="?sort=hightolow" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                             Price high to low
-                        </p>
+                        </a>
 
-                        <p class="sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                        <a href="?sort=recent" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                             Recently added
-                        </p>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="grid grid-cols-4 gap-8 pt-8 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-        <?php for ($i = 0; $i < 16; $i++) : ?>
+        <?php foreach ($auctions as $product) : ?>
             <?php require "../app/views/components/productCard.php"; ?>
-        <?php endfor; ?>
+        <?php endforeach; ?>
     </div>
     <div class="w-full grid place-items-center pt-16">
         <button type="button"
