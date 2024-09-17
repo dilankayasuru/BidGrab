@@ -1,35 +1,25 @@
 <?php
+$rowCount = count($tableData["headings"]);
+$headings = $tableData["headings"];
+$columns = $tableData["columns"];
+?>
+<div class='w-full border border-blue-500 rounded-xl p-4 bg-fadeWhite'>
+    <div class='mb-4'>
+        <h1><?= $tableTitle ?></h1>
+    </div>
+    <div>
+        <div class='grid grid-cols-<?= $rowCount ?> place-items-center text-gray pb-2'>
+            <?php foreach ($headings as $heading) : ?>
+                <p><?= $heading ?></p>
+            <?php endforeach; ?>
+        </div>
+        <?php foreach ($columns as $column) : ?>
+            <div class='grid grid-cols-<?= $rowCount ?> place-items-center mb-1'>
+                <?php foreach ($column as $data) : ?>
+                    <p><?= $data ?></p>
+                <?php endforeach; ?>
+            </div>
+        <?php endforeach; ?>
 
-function dataGrid($tableTitle)
-{
-    return
-        "<div class='w-full border border-blue-500 rounded-xl p-4 bg-fadeWhite'>
-            <div>
-                <h1>$tableTitle</h1>
-                <div>
-                    <a href='prev'>'<-'</a>
-                    <a href='next'>'->'</a>
-                </div>
-            </div>
-            <div>
-                <div class='grid grid-cols-4 place-items-center text-gray pb-4'>
-                    <p>Id</p>
-                    <p>Seller</p>
-                    <p>Status</p>
-                    <p>Price</p>
-                </div>                
-                <div class='grid grid-cols-4 place-items-center'>
-                    <p>1001</p>
-                    <p>Mickey</p>
-                    <p>Mouse</p>
-                    <p>Rs.1500</p>
-                </div>
-                <div class='grid grid-cols-4 place-items-center'>
-                    <p>1001</p>
-                    <p>Mickey</p>
-                    <p>Mouse</p>
-                    <p>Rs.1500</p>
-                </div>
-            </div>
-        </div>";
-}
+    </div>
+</div>

@@ -220,5 +220,5 @@ body {
 }
 
 .create-auction-btn {
-    @apply animate-bounce hover:animate-none text-white bg-blue rounded-md px-4 py-2 absolute bottom-0 right-0 mb-8 mr-8 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-lg transition-all duration-300;
+    @apply z-10 hover:animate-none text-white bg-blue rounded-md px-4 py-2 absolute bottom-0 right-0 mb-8 mr-8 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-lg transition-all duration-300;
 }

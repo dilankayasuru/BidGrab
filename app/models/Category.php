@@ -10,7 +10,7 @@ class Category {
 
     public function getAllCategories()
     {
-        $this->db->query("SELECT category_id, name FROM category");
+        $this->db->query("SELECT * FROM category");
         $this->db->execute();
         return $this->db->results();
     }

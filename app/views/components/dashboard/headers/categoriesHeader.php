@@ -56,3 +56,9 @@
         </a>
     </div>
 </div>
+
+<a href="/bidgrab/public/dashboard/add-new-category"
+   class="create-auction-btn z-10">
+    <i class="fa-solid fa-plus text-xl"></i>
+    <span class="pl-2">Add new category</span>
+</a>

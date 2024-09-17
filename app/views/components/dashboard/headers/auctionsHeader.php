@@ -72,7 +72,7 @@
 </div>
 
 <a href="/bidgrab/public/dashboard/add-new-auction"
-   class="create-auction-btn z-10">
+   class="create-auction-btn animate-bounce">
     <i class="fa-solid fa-plus text-xl"></i>
     <span class="pl-2">Create new auction</span>
 </a>

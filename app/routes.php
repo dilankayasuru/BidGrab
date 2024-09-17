@@ -8,10 +8,13 @@ return $routes = [
     'register' => ['controller' => 'Auth', 'method' => 'register'],
     'sign-out' => ['controller' => 'Auth', 'method' => 'signOut'],
 
+    'categories' => ['controller' => 'CategoryController', 'method' => 'getAllCategories'],
+
 
     'dashboard' => ['controller' => 'Dashboard', 'method' => 'index'],
     'dashboard/home' => ['controller' => 'Dashboard', 'method' => 'index'],
     'dashboard/orders' => ['controller' => 'OrderController', 'method' => 'getAllOrders'],
+    'dashboard/categories' => ['controller' => 'CategoryController', 'method' => 'dashBoardCategories'],
     'dashboard/profile' => ['controller' => 'UserController', 'method' => 'profile'],
     'dashboard/wallet' => ['controller' => 'Dashboard', 'method' => 'index'],
     'dashboard/add-new-auction' => ['controller' => 'ProductController', 'method' => 'addNew'],
