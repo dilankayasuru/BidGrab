@@ -141,7 +141,6 @@ class ProductController extends Controller
     {
         $this->productModel = $this->loadModel("Product");
         $categoryModel = $this->loadModel("Category");
-        $itemImageModel = $this->loadModel("ItemImage");
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $description = $_POST["description"];

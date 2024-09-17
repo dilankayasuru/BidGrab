@@ -1,7 +1,7 @@
 <div class="h-44 w-full p-4 border border-blue-500 rounded-xl relative flex justify-between mb-8">
-    <div class="flex gap-8">
-        <div class="flex gap-2">
-            <div class="border border-gray rounded-lg overflow-hidden w-fit h-fit">
+    <div class="flex gap-2">
+        <div class="flex gap-2 w-80">
+            <div class="border border-gray rounded-lg overflow-hidden w-48 h-32">
                 <?php
                 if (empty($product["image"])) {
                     $imageSrc = "/bidgrab/public/images/placeholder.png";
@@ -10,7 +10,7 @@
                     $imageSrc = "/bidgrab/app/server/auctionImages/".$product["image"];
                 }
                 ?>
-                <img src="<?= $imageSrc ?>" alt="product image" class="max-h-28">
+                <img src="<?= $imageSrc ?>" alt="product image" class="w-full h-full object-cover">
             </div>
             <div class="pt-2">
                 <p><?= $product["title"]; ?></p>
@@ -54,7 +54,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     <div>
         <p class="rounded-2xl <?= $product["status"] == 'live' ? 'bg-red' : ($product["status"] == 'pending' ? 'bg-orange' : 'bg-green') ?> px-4 py-1.5 text-white w-fit"><?= $product["status"] ?></p>

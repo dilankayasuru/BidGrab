@@ -4,5 +4,6 @@
     <?php require "../app/views/components/productInfo.php"; ?>
 </div>
 <div class="ps-[8vw] pe-[8vw] lg:pe-[2ve] lg:ps-[2vw]">
+    <?php $carouselTitle = "Similar Auctions" ?>
     <?php require "../app/views/components/productCarousel.php"; ?>
 </div>

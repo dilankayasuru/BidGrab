@@ -10,13 +10,18 @@ return $routes = [
 
     'categories' => ['controller' => 'CategoryController', 'method' => 'getAllCategories'],
 
-
     'dashboard' => ['controller' => 'Dashboard', 'method' => 'index'],
     'dashboard/home' => ['controller' => 'Dashboard', 'method' => 'index'],
     'dashboard/orders' => ['controller' => 'OrderController', 'method' => 'getAllOrders'],
+
     'dashboard/categories' => ['controller' => 'CategoryController', 'method' => 'dashBoardCategories'],
+    'dashboard/add-new-category' => ['controller' => 'CategoryController', 'method' => 'addNew'],
+    'dashboard/edit-category' => ['controller' => 'CategoryController', 'method' => 'edit'],
+    'dashboard/delete-category' => ['controller' => 'CategoryController', 'method' => 'delete'],
+
     'dashboard/profile' => ['controller' => 'UserController', 'method' => 'profile'],
     'dashboard/wallet' => ['controller' => 'Dashboard', 'method' => 'index'],
+
     'dashboard/add-new-auction' => ['controller' => 'ProductController', 'method' => 'addNew'],
     'dashboard/auctions' => ['controller' => 'ProductController', 'method' => 'getAllAuctions'],
 

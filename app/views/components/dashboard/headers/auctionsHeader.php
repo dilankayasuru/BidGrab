@@ -18,22 +18,25 @@
                          class="w-6 h-6"/>
                 </div>
                 <p class="px-2 py-2">
-                    Sort By: <span id="selected-sort"><?=ucfirst($sort)?></span>
+                    Sort By: <span id="selected-sort"><?= ucfirst($sort) ?></span>
                 </p>
             </div>
 
             <div id="sort-menu" class="hidden absolute end-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white"
                  role="menu">
                 <div class="p-2">
-                    <a href="?filter=<?= $filter ?>&sort=default" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                    <a href="?filter=<?= $filter ?>&sort=default"
+                       class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                         Default
                     </a>
 
-                    <a href="?filter=<?= $filter ?>&sort=latest" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                    <a href="?filter=<?= $filter ?>&sort=latest"
+                       class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                         Latest
                     </a>
 
-                    <a href="?filter=<?= $filter ?>&sort=old" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                    <a href="?filter=<?= $filter ?>&sort=old"
+                       class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                         Old
                     </a>
                 </div>
@@ -71,8 +74,10 @@
     </div>
 </div>
 
-<a href="/bidgrab/public/dashboard/add-new-auction"
-   class="create-auction-btn animate-bounce">
-    <i class="fa-solid fa-plus text-xl"></i>
-    <span class="pl-2">Create new auction</span>
-</a>
+<?php if ($_SESSION["user"]["user_role"] == "user") : ?>
+    <a href="/bidgrab/public/dashboard/add-new-auction"
+       class="create-auction-btn animate-bounce">
+        <i class="fa-solid fa-plus text-xl"></i>
+        <span class="pl-2">Create new auction</span>
+    </a>
+<?php endif; ?>

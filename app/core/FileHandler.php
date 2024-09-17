@@ -56,6 +56,15 @@ class FileHandler
             "/bidgrab/app/server/profileImages/$sellerPic" : "https://avatar.iran.liara.run/username?username=$sellerName";
     }
 
+    public static function getCategoryImage($image)
+    {
+        $dirName = "../app/server/categoryImages";
+        if ($image !== '' && glob("$dirName/$image")) {
+            return "/bidgrab/app/server/categoryImages/$image";
+        }
+        return "/bidgrab/public/images/placeholder.png";
+    }
+
     public function uploadFile($name, $subDir)
     {
         $this->targetFile = $this->dirname . $subDir . '/' . basename($this->tempFile["name"]);
@@ -76,6 +85,19 @@ class FileHandler
         $resultRename = rename($this->targetFile, $this->dirname . "$subDir/" . $name . "." . $this->imageFileType);
 
         return ($resultRename && $resultMove) ? "$name.$this->imageFileType" : false;
+    }
+
+    public static function removeImage($name, $subDir)
+    {
+        if (empty($name)) {
+            return;
+        }
+        $files = glob("../app/server/$subDir/$name");
+        if ($files) {
+            foreach ($files as $file) {
+                unlink($file);
+            }
+        }
     }
 
     public static function removeAuctionImages($id)
