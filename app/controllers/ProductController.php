@@ -37,12 +37,15 @@ class ProductController extends Controller
     public function getProductById($id)
     {
         $recentItems = $this->productModel->getRecentlyAddedAuctions();
-        $product = $this->productModel->getProduct($id)["product"];
-        $images = $this->productModel->getProduct($id)["images"];
-        $seller = $this->productModel->getProduct($id)["seller"];
+        $productInfo = $this->productModel->getProduct($id);
+        $product = $productInfo["product"];
+        $images = $productInfo["images"];
+        $seller = $productInfo["seller"];
+        $isStarted = $productInfo["isStarted"];
+        $isExpired = $productInfo["isExpired"];
 
 
-        if ($product["status"] !== 'live' && $_SESSION["user"]["user_role"] !== "admin") {
+        if ($product["status"] !== 'approved' && $_SESSION["user"]["user_role"] !== "admin") {
             header("Location: item-not-found");
         }
 
@@ -51,7 +54,9 @@ class ProductController extends Controller
             "recentItems" => $recentItems,
             "product" => $product,
             "images" => $images,
-            "seller" => $seller
+            "seller" => $seller,
+            "isStarted" => $isStarted,
+            "isExpired" => $isExpired,
         ]);
     }
 
@@ -175,7 +180,7 @@ class ProductController extends Controller
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (isset($_POST["approve"])) {
-                $this->productModel->changeStatus("live", $id);
+                $this->productModel->changeStatus("approved", $id);
                 header("Location: dashboard/auctions");
             }
             if (isset($_POST["reject"])) {

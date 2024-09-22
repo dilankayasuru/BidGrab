@@ -24,7 +24,7 @@ class Product
         try {
             $this->db->beginTransaction();
 
-            $this->db->query("INSERT INTO auction_item (title, description, category_id, product_condition, start_date, end_date, start_time, end_time, current_price, seller_id) VALUES (:title, :description, :category, :condition, :start_date, :end_date, :start_time, :end_time, :current_price, :seller_id)");
+            $this->db->query("INSERT INTO auction_item (title, description, category_id, product_condition, start_date, end_date, start_time, end_time, current_price, base_price, seller_id) VALUES (:title, :description, :category, :condition, :start_date, :end_date, :start_time, :end_time, :current_price, :base_price, :seller_id)");
             $this->db->bind(':title', $productTitle);
             $this->db->bind(':description', $description);
             $this->db->bind(':category', $category);
@@ -34,6 +34,7 @@ class Product
             $this->db->bind(':start_time', $startTime);
             $this->db->bind(':end_time', $endTime);
             $this->db->bind(':current_price', $basePrice);
+            $this->db->bind(':base_price', $basePrice);
             $this->db->bind(':seller_id', $_SESSION["user"]["user_id"]);
             $this->db->execute();
 
@@ -77,7 +78,7 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
         $orderBy = $sort == "latest" ? "ORDER BY date_added DESC" : ($sort == "old" ? "ORDER BY date_added ASC" : "");
 
         $query = "
-SELECT auction_item.*, item_image.image, category.name as category, users.first_name as seller 
+SELECT auction_item.*, CONCAT(auction_item.start_date,' ', auction_item.start_time) < NOW() AS isLive, CONCAT(auction_item.end_date,' ', auction_item.end_time) < NOW() AS isExpired, item_image.image, category.name as category, users.first_name as seller 
 FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.image 
     LEFT JOIN category on category.category_id=auction_item.category_id JOIN users on users.user_id=auction_item.seller_id";
 
@@ -174,13 +175,20 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
 
         $seller = $this->db->result();
 
+        $this->db->query("SELECT CONCAT(start_date,' ', start_time) < NOW() AS isStarted, CONCAT(end_date,' ', end_time) < NOW() AS isExpired FROM auction_item WHERE auction_id=:auction_id");
+        $this->db->bind(':auction_id', $id);
+        $this->db->execute();
+
+        $isStarted = $this->db->result()["isStarted"];
+        $isExpired = $this->db->result()["isExpired"];
+
         $this->db->commitTransaction();
 
         if (!$product) {
             header("Location: item-not-found");
         }
 
-        return ["product" => $product, "images" => $images, "seller" => $seller];
+        return ["product" => $product, "images" => $images, "seller" => $seller, "isStarted" => $isStarted, "isExpired" => $isExpired];
     }
 
     public function editProduct(
@@ -246,7 +254,7 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
         return $this->db->result();
     }
 
-    public function displayAuctions($category = "all", $sort = '', $status = 'live')
+    public function displayAuctions($category = "all", $sort = '', $status = 'approved')
     {
         $this->db->beginTransaction();
 

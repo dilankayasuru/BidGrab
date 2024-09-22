@@ -1,42 +1,56 @@
 <section class="w-full lg:mb-16">
     <div class="border-b border-gray grid grid-flow-row gap-4 pb-4 mb-4 lg:mb-8">
         <div>
-            <p class="text-2xl font-bold"><?=$product["title"]?></p>
-            <p class="text-gray"><?=$product["category"]?></p>
+            <p class="text-2xl font-bold"><?= $product["title"] ?></p>
+            <p class="text-gray"><?= $product["category"] ?></p>
         </div>
         <div>
-            <p class="text-gray">Current Bid: <span class="text-2xl text-black font-bold"><?=$product["current_price"]?></span></p>
+            <p class="text-gray"> <?= $isStarted ? "Current Bid:" : "Starting Price:" ?>
+                <span class="text-2xl text-black font-bold"><?= $product["current_price"] ?></span>
+            </p>
         </div>
-        <div class="flex gap-4">
-            <div class="border border-blue-500 px-4 py-1 rounded-lg">
-                <p class="text-gray">50 Bids</p>
-            </div>
-            <div class="border border-blue-500 px-4 py-1 rounded-lg">
-                <p class="text-gray">Ends in: <span id="time-remaining"></span></p>
-<!--                --><?php //=date("d/m/Y",strtotime($product["end_date"]))?>
-            </div>
-        </div>
-        <div class="flex items-center justify-center gap-6 w-full">
-            <div class="minus-btn bg-white w-11 h-11 grid items-center justify-center rounded-lg shadow-md border border-blue-500 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md duration-300 transition-all cursor-pointer">
-                <i class="fa-solid fa-minus"></i>
-            </div>
-            <div>
-                <label for="bidAmount" class="sr-only">Bid Amount</label>
-                <div class="flex justify-center items-center">
-                    <span class="text-2xl">Rs. </span>
-                    <input type="number"
-                           class="border-b font-bold text-center text-2xl lg:w-44 sm:w-36 bg-fadeWhite focus:outline-none active:outline-none"
-                           value="<?=$product["current_price"]+500?>" id="bidAmount">
+        <?php if ($isStarted && !$isExpired) : ?>
+            <div class="flex gap-4">
+                <div class="border border-blue-500 px-4 py-1 rounded-lg">
+                    <p class="text-gray">50 Bids</p>
                 </div>
+                <div class="border border-blue-500 px-4 py-1 rounded-lg">
+                    <p class="text-gray">Ends in: <span id="time-remaining"></span></p>
+                </div>
+            </div>
 
+            <div class="flex items-center justify-center gap-6 w-full">
+                <div class="minus-btn bg-white w-11 h-11 grid items-center justify-center rounded-lg shadow-md border border-blue-500 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md duration-300 transition-all cursor-pointer">
+                    <i class="fa-solid fa-minus"></i>
+                </div>
+                <div>
+                    <label for="bidAmount" class="sr-only">Bid Amount</label>
+                    <div class="flex justify-center items-center">
+                        <span class="text-2xl">Rs. </span>
+                        <input type="number"
+                               class="border-b font-bold text-center text-2xl lg:w-44 sm:w-36 bg-fadeWhite focus:outline-none active:outline-none"
+                               value="<?= $product["current_price"] + 500 ?>" id="bidAmount">
+                    </div>
+
+                </div>
+                <div class="plus-btn bg-white w-11 h-11 grid items-center justify-center rounded-lg shadow-md border border-blue-500 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md duration-300 transition-all cursor-pointer">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
             </div>
-            <div class="plus-btn bg-white w-11 h-11 grid items-center justify-center rounded-lg shadow-md border border-blue-500 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md duration-300 transition-all cursor-pointer">
-                <i class="fa-solid fa-plus"></i>
+            <button class=" w-full grid items-center justify-center py-4 bg-blue text-white rounded-lg hover:shadow-lg hover:-translate-y-0.5 active:shadow-md active:translate-y-0 transition-all duration-300 font-medium">
+                Place Bid
+            </button>
+        <?php elseif ($isExpired): ?>
+            <div class="text-gray text-center text-xl font-bold">
+                <p>Auction is Expired!</p>
             </div>
-        </div>
-        <button class=" w-full grid items-center justify-center py-4 bg-blue text-white rounded-lg hover:shadow-lg hover:-translate-y-0.5 active:shadow-md active:translate-y-0 transition-all duration-300 font-medium">
-            Place Bid
-        </button>
+        <?php elseif (!$isStarted): ?>
+            <div class="text-gray text-center text-xl font-bold">
+                <p>Auction starts at: <?=$product["start_date"]." ".$product["start_time"]?></p>
+            </div>
+        <?php endif; ?>
+
+
     </div>
     <div class="grid grid-flow-row gap-2">
         <p class="font-bold text-lg">Description</p>
@@ -44,18 +58,17 @@
             <p class="text-gray">Seller:</p>
             <?php require "../app/views/components/sellerBadge.php" ?>
         </div>
-        <p class="text-gray">Condition: <span class="text-black"><?=$product["product_condition"]?></span></p>
-        <p><?=$product["description"]?></p>
+        <p class="text-gray">Condition: <span class="text-black"><?= $product["product_condition"] ?></span></p>
+        <p><?= $product["description"] ?></p>
     </div>
 </section>
 
 <?php
-$endTime = new DateTime($product["end_date"]." ".$product["end_time"]);
+$endTime = new DateTime($product["end_date"] . " " . $product["end_time"]);
 $endTimeTimeStamp = $endTime->getTimestamp();
 ?>
 
 <script>
-
     // Select all buttons with the classes 'minus-btn' and 'plus-btn'
     const buttons = document.querySelectorAll(".minus-btn, .plus-btn");
 
@@ -102,8 +115,7 @@ $endTimeTimeStamp = $endTime->getTimestamp();
         let mins = Math.floor((differance % (1000 * 60 * 60)) / (1000 * 60))
         let secs = Math.floor((differance % (1000 * 60)) / 1000);
 
-        document.getElementById("time-remaining").innerHTML = days + "d " + hours + "h " + mins + "m " + secs + "s left";
-        document.getElementById("time-remaining").innerHTML = `${days > 0 ? days +"d" : ''} ${hours > 0 ? hours +"h" : ''} ${mins > 0 ? mins +"m" : ''} ${secs > 0 ? secs +"s" : ''} left`;
+        document.getElementById("time-remaining").innerHTML = `${days > 0 ? days + "d" : ''} ${hours > 0 ? hours + "h" : ''} ${mins > 0 ? mins + "m" : ''} ${secs > 0 ? secs + "s" : ''} left`;
 
         // If the countdown is over, display an expiration message
         if (differance < 0) {
