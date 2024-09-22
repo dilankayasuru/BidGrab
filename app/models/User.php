@@ -192,4 +192,11 @@ class User
             echo "Failed: " . $e->getMessage();
         }
     }
+
+    public function getAllUsers()
+    {
+        $this->db->query("SELECT * FROM users");
+        $this->db->execute();
+        return $this->db->results();
+    }
 }

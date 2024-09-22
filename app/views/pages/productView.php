@@ -7,3 +7,11 @@
     <?php $carouselTitle = "Similar Auctions" ?>
     <?php require "../app/views/components/productCarousel.php"; ?>
 </div>
+
+<?php if ($product["status"] === "pending") : ?>
+    <div class="fixed animate-pulse top-0 right-0 z-50 mt-24 mr-11">
+        <div class="w-24 h-24 rounded-full bg-orange flex justify-center items-center shadow-xl">
+            <p class="text-center text-white font-bold">Pending Auction</p>
+        </div>
+    </div>
+<?php endif; ?>

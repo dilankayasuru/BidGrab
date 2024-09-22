@@ -59,7 +59,7 @@ class FileHandler
     public static function getCategoryImage($image)
     {
         $dirName = "../app/server/categoryImages";
-        if ($image !== '' && glob("$dirName/$image")) {
+        if (!empty($image) && glob("$dirName/$image")) {
             return "/bidgrab/app/server/categoryImages/$image";
         }
         return "/bidgrab/public/images/placeholder.png";

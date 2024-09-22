@@ -1,9 +1,27 @@
 <?php $noAuctions = true; ?>
 <?php if (count($products) > 0) : ?>
-    <div class="pb-44">
+    <div class="pb-32">
+        <?php if ($_SESSION["user"]["user_role"] == "admin") : ?>
+            <div class="grid grid-cols-7 place-items-center mb-4 text-gray">
+                <p>Auction</p>
+                <p>Date</p>
+                <p>Seller</p>
+                <p>Title</p>
+                <p>Current Price</p>
+                <p>Status</p>
+                <p>Action</p>
+            </div>
+        <?php endif; ?>
+
         <?php foreach ($products as $product) : ?>
             <?php if ($filter == $product["status"] || $filter == "all") : ?>
-                <?php require "../app/views/components/dashboard/cards/auction.php"; ?>
+
+                <?php if ($_SESSION["user"]["user_role"] == "admin") : ?>
+                    <?php require "../app/views/components/dashboard/cards/adminAuctionRow.php"; ?>
+                <?php else: ?>
+                    <?php require "../app/views/components/dashboard/cards/auction.php"; ?>
+                <?php endif; ?>
+
                 <?php $noAuctions = false; ?>
             <?php endif; ?>
         <?php endforeach; ?>
@@ -16,65 +34,50 @@
     </div>
 <?php endif; ?>
 
-<div class="h-dvh w-dvw backdrop-blur absolute top-0 left-0 z-10 hidden justify-center items-center"
-     id="deleteAuctionFormContainer">
-    <form id="deleteAuctionForm" method="POST" action="/bidgrab/public/auction/delete?id="
-          class="bg-white p-8 shadow-lg rounded-xl text-center relative">
-        <div class="mb-8">
-            <i class="fa-regular fa-circle-xmark text-red text-5xl"></i>
-        </div>
-        <div class="mb-8">
-            <p class="text-gray text-xl">Are you sure you want to delete this auction!</p>
-        </div>
-        <div class="flex gap-4 items-center justify-center">
-            <button
-                    type="button"
-                    id="deleteAuctionFormClose"
-                    class="py-2 px-4 rounded-lg bg-gray text-white">
-                Cancel
-            </button>
-            <button
-                    type="submit"
-                    class="py-2 px-4 rounded-lg bg-red text-white">
-                Delete
-            </button>
-        </div>
-        <i class="fa-solid fa-xmark cursor-pointer absolute right-0 top-0 m-4 text-xl"
-           id="delete-auction-form-close"></i>
-    </form>
+<div class="h-dvh w-dvw backdrop-blur absolute top-0 left-0 z-10 hidden justify-center items-center manageAuctionFormContainer">
+    <?php if ($_SESSION["user"]["user_role"] == "admin") : ?>
+        <?php require_once "../app/views/components/dashboard/forms/adminManageAuction.php"; ?>
+    <?php else: ?>
+        <?php require_once "../app/views/components/dashboard/forms/userDeleteAuction.php"; ?>
+    <?php endif; ?>
 </div>
 
 <script>
-    let deleteAuctionForm;
-    let deleteAuctionFormContainer;
-    let deleteAuctionFormCloseBtn;
-    let deleteAuctionFromCancelBtn;
+    let manageAuctionForm;
+    let manageAuctionFormContainer;
+    let manageAuctionFormCloseBtn;
+    let manageAuctionFromCancelBtn;
+    let auctionId;
 
-    function deleteAuction() {
-        openAuctionDeleteForm();
-        let auctionId = event.target.value;
-        deleteAuctionForm.action += auctionId;
+    function manageAuction() {
+        openAuctionManageForm();
+        auctionId = event.currentTarget.value;
+        manageAuctionForm.action += auctionId;
+
+        if (manageAuctionForm.id !== "deleteAuctionForm") {
+            document.getElementById('manage-auction-view').href = "<?=BASE_URL?>product?id="+auctionId;
+        }
     }
 
-    function closeAuctionDeleteForm() {
-        deleteAuctionForm.reset();
-        deleteAuctionForm.action = "/bidgrab/public/auction/delete?id=";
-        deleteAuctionFormContainer.classList.remove('flex');
-        deleteAuctionFormContainer.classList.add('hidden');
+    function closeAuctionManageForm() {
+        manageAuctionForm.reset();
+        manageAuctionForm.action = manageAuctionForm.id === "deleteAuctionForm" ? "/bidgrab/public/auction/delete?id=" : "/bidgrab/public/auction-manage?id=";
+        manageAuctionFormContainer.classList.remove('flex');
+        manageAuctionFormContainer.classList.add('hidden');
     }
 
-    function openAuctionDeleteForm() {
-        deleteAuctionFormContainer.classList.remove('hidden');
-        deleteAuctionFormContainer.classList.add('flex');
+    function openAuctionManageForm() {
+        manageAuctionFormContainer.classList.remove('hidden');
+        manageAuctionFormContainer.classList.add('flex');
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        deleteAuctionForm = document.getElementById("deleteAuctionForm");
-        deleteAuctionFormContainer = document.getElementById("deleteAuctionFormContainer");
-        deleteAuctionFormCloseBtn = document.getElementById("delete-auction-form-close");
-        deleteAuctionFromCancelBtn = document.getElementById("deleteAuctionFormClose");
+        manageAuctionForm = document.querySelector(".manageAuctionForm");
+        manageAuctionFormContainer = document.querySelector(".manageAuctionFormContainer");
+        manageAuctionFormCloseBtn = document.querySelector(".manage-auction-form-close");
+        manageAuctionFromCancelBtn = document.querySelector(".manageAuctionFormClose");
 
-        deleteAuctionFormCloseBtn.addEventListener("click", closeAuctionDeleteForm);
-        deleteAuctionFromCancelBtn.addEventListener("click", closeAuctionDeleteForm);
+        manageAuctionFormCloseBtn.addEventListener("click", closeAuctionManageForm);
+        manageAuctionFromCancelBtn.addEventListener("click", closeAuctionManageForm);
     });
 </script>

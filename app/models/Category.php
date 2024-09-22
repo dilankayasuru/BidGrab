@@ -1,16 +1,30 @@
 <?php
 require_once "../app/core/Database.php";
 
-class Category {
+class Category
+{
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
     }
 
     public function getAllCategories()
     {
         $this->db->query("SELECT * FROM category");
+        $this->db->execute();
+        return $this->db->results();
+    }
+
+    public function getTrendingCategories()
+    {
+        $this->db->query(
+            "SELECT COUNT(auction_item.auction_id) AS occurrence, category.* FROM category 
+                JOIN auction_item ON category.category_id=auction_item.category_id 
+                GROUP BY category.category_id 
+                ORDER BY occurrence DESC LIMIT 12;"
+        );
         $this->db->execute();
         return $this->db->results();
     }
@@ -37,8 +51,7 @@ class Category {
             $this->db->commitTransaction();
 
             header("Location: /bidgrab/public/dashboard/categories");
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage();
             $this->db->rollback();
         }
@@ -57,8 +70,7 @@ class Category {
             $this->db->execute();
 
             $this->db->commitTransaction();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage();
             $this->db->rollback();
         }
@@ -85,8 +97,7 @@ class Category {
             $this->db->commitTransaction();
 
             header("Location: /bidgrab/public/dashboard/categories");
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage();
             $this->db->rollback();
         }

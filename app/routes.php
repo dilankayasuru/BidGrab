@@ -20,14 +20,21 @@ return $routes = [
     'dashboard/delete-category' => ['controller' => 'CategoryController', 'method' => 'delete'],
 
     'dashboard/profile' => ['controller' => 'UserController', 'method' => 'profile'],
-    'dashboard/wallet' => ['controller' => 'Dashboard', 'method' => 'index'],
+    'dashboard/wallet' => ['controller' => 'WalletController', 'method' => 'getUserWallet'],
 
     'dashboard/add-new-auction' => ['controller' => 'ProductController', 'method' => 'addNew'],
     'dashboard/auctions' => ['controller' => 'ProductController', 'method' => 'getAllAuctions'],
 
+    'dashboard/users' => ['controller' => 'UserController', 'method' => 'getAllUsers'],
+
     'auction/delete' => ['controller' => 'ProductController', 'method' => 'deleteProduct'],
     'dashboard/auction-edit' => ['controller' => 'ProductController', 'method' => 'editProduct'],
 
+    'auction-manage' => ['controller' => 'ProductController', 'method' => 'adminAuction'],
+
     'change-profile' => ['controller' => 'UserController', 'method' => 'changeProfile'],
     'reset-password' => ['controller' => 'UserController', 'method' => 'resetPassword'],
+
+    'deposit' => ['controller' => 'WalletController', 'method' => 'deposit'],
+    'withdraw' => ['controller' => 'WalletController', 'method' => 'withdraw'],
 ];

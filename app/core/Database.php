@@ -62,12 +62,12 @@ class Database
 
     public function commitTransaction()
     {
-        $this->dbh->commit();
+        return $this->dbh->commit();
     }
 
     public function rollback()
     {
-        $this->dbh->rollBack();
+        return $this->dbh->rollBack();
     }
 
     public function lastInsertId()

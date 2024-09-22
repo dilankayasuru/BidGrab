@@ -57,9 +57,11 @@ class Product
         $query = "
 SELECT auction_item.*, item_image.image, category.name as category 
 FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.image 
-    LEFT JOIN category on category.category_id=auction_item.category_id GROUP BY auction_item.auction_id ORDER by auction_item.date_added DESC LIMIT 10";
+    LEFT JOIN category on category.category_id=auction_item.category_id WHERE auction_item.status=:status GROUP BY auction_item.auction_id ORDER by auction_item.date_added DESC LIMIT 10";
 
         $this->db->query($query);
+
+        $this->db->bind(':status', 'live');
 
         $this->db->execute();
 
@@ -75,9 +77,9 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
         $orderBy = $sort == "latest" ? "ORDER BY date_added DESC" : ($sort == "old" ? "ORDER BY date_added ASC" : "");
 
         $query = "
-SELECT auction_item.*, item_image.image, category.name as category 
+SELECT auction_item.*, item_image.image, category.name as category, users.first_name as seller 
 FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.image 
-    LEFT JOIN category on category.category_id=auction_item.category_id";
+    LEFT JOIN category on category.category_id=auction_item.category_id JOIN users on users.user_id=auction_item.seller_id";
 
         if ($role == "user") {
             $query = $query . " WHERE auction_item.seller_id=:userId GROUP BY auction_item.auction_id $orderBy";
@@ -138,7 +140,10 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
             $this->db->query("DELETE FROM auction_item WHERE auction_id=:auctionId");
             $this->db->bind(':auctionId', $id);
             $this->db->execute();
-            $this->db->commitTransaction();
+
+            if ($this->db->commitTransaction()) {
+                FileHandler::removeAuctionImages($id);
+            }
 
             header("Location: /bidgrab/public/dashboard/auctions");
         } catch (Exception $e) {
@@ -171,6 +176,10 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
 
         $this->db->commitTransaction();
 
+        if (!$product) {
+            header("Location: item-not-found");
+        }
+
         return ["product" => $product, "images" => $images, "seller" => $seller];
     }
 
@@ -198,7 +207,8 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
                         end_date=:end_date,
                         start_time=:start_time,
                         end_time=:end_time,
-                        base_price=:base_price 
+                        base_price=:base_price,
+                        status=:status
                     WHERE auction_id=:auctionId"
             );
             $this->db->bind(':auctionId', $id);
@@ -211,6 +221,7 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
             $this->db->bind(':start_time', $startTime);
             $this->db->bind(':end_time', $endTime);
             $this->db->bind(':base_price', $basePrice);
+            $this->db->bind(':status', 'pending');
             $this->db->execute();
 
             $this->removeOldImages($id);
@@ -235,38 +246,53 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
         return $this->db->result();
     }
 
-    public function displayAuctions($category = "all", $sort = '')
+    public function displayAuctions($category = "all", $sort = '', $status = 'live')
     {
         $this->db->beginTransaction();
 
         if ($category !== "all") {
-            $categoryQuery = ' WHERE category.category_id=:categoryId';
-        }
-        else {
+            $categoryQuery = ' AND category.category_id=:categoryId';
+        } else {
             $categoryQuery = '';
         }
 
         $sortQuery = '';
 
         if ($sort !== '') {
-            $sortQuery = 'ORDER by auction_item.'.$sort;
+            $sortQuery = 'ORDER by auction_item.' . $sort;
         }
 
         $query = "
 SELECT auction_item.*, item_image.image, category.name as category 
 FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.image 
-    LEFT JOIN category on category.category_id=auction_item.category_id$categoryQuery GROUP BY auction_item.auction_id $sortQuery";
+    LEFT JOIN category on category.category_id=auction_item.category_id WHERE auction_item.status=:status$categoryQuery GROUP BY auction_item.auction_id $sortQuery";
 
         $this->db->query($query);
 
         if ($category !== "all") {
             $this->db->bind(':categoryId', $category);
         }
+        $this->db->bind(':status', $status);
 
         $this->db->execute();
 
         $this->db->commitTransaction();
 
         return $this->db->results();
+    }
+
+    public function changeStatus($status, $id)
+    {
+        try {
+            $this->db->beginTransaction();
+            $this->db->query("UPDATE auction_item SET status=:status WHERE auction_id=:id");
+            $this->db->bind(':status', $status);
+            $this->db->bind(':id', $id);
+            $this->db->execute();
+            $this->db->commitTransaction();
+        }
+        catch (PDOException $e) {
+            echo $e->getMessage();
+        }
     }
 }

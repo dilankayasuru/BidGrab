@@ -56,7 +56,7 @@
         </div>
     </div>
     <div>
-        <p class="rounded-2xl <?= $product["status"] == 'live' ? 'bg-red' : ($product["status"] == 'pending' ? 'bg-orange' : 'bg-green') ?> px-4 py-1.5 text-white w-fit"><?= $product["status"] ?></p>
+        <p class="rounded-2xl <?= $product["status"] == 'live' ? 'bg-red' : ($product["status"] == 'pending' ? 'bg-orange' : ($product['status'] == 'completed' ? 'bg-green' : 'bg-gray')) ?> px-4 py-1.5 text-white w-fit"><?= $product["status"] ?></p>
     </div>
     <?php if ($product["status"] == "completed") : ?>
         <form action="" method="POST" class="absolute bottom-0 right-0 mb-4 mr-4">
@@ -74,7 +74,16 @@
         </form>
     <?php elseif ($product["status"] == "pending") : ?>
         <div class="flex gap-2 items-center justify-start absolute bottom-0 right-0 mb-4 mr-4">
-            <button type="button" onclick="deleteAuction()" value="<?= $product["auction_id"] ?>" class="block border border-blue py-1.5 px-4 rounded-2xl text-blue shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-300">
+            <button type="button" onclick="manageAuction()" value="<?= $product["auction_id"] ?>" class="block border border-blue py-1.5 px-4 rounded-2xl text-blue shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-300">
+                Delete auction</button>
+
+            <a href="/bidgrab/public/dashboard/auction-edit?id=<?= $product['auction_id'] ?>"
+               class="block border border-blue py-1.5 px-4 rounded-2xl text-blue shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-300">
+                Edit auction</a>
+        </div>
+    <?php elseif ($product["status"] == "rejected") : ?>
+        <div class="flex gap-2 items-center justify-start absolute bottom-0 right-0 mb-4 mr-4">
+            <button type="button" onclick="manageAuction()" value="<?= $product["auction_id"] ?>" class="block border border-blue py-1.5 px-4 rounded-2xl text-blue shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-300">
                 Delete auction</button>
 
             <a href="/bidgrab/public/dashboard/auction-edit?id=<?= $product['auction_id'] ?>"
@@ -83,7 +92,7 @@
         </div>
     <?php else: ?>
         <div class="flex gap-2 items-center justify-start absolute bottom-0 right-0 mb-4 mr-4">
-            <a href="#"
+            <a href="<?=BASE_URL?>product?id=<?=$product['auction_id']?>"
                class="block border border-blue py-1.5 px-4 rounded-2xl text-blue shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-300">
                 View auction</a>
         </div>

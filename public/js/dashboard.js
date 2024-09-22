@@ -8,6 +8,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 })
-function clearImages() {
-    window.location.replace("/bidgrab/public/dashboard/category-edit?id=<?=$category['category_id']?>");
-}

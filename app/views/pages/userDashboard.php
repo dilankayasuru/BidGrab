@@ -19,7 +19,7 @@
     </div>
     <div class="w-full bg-white rounded-xl px-4 py-4 h-[calc(100vh_-_32px)] overflow-hidden">
         <?php require_once "../app/views/components/dashboard/headers/" . $tab . "Header.php" ?>
-        <div class="overflow-y-auto h-[calc(100%_-_16px)] pb-10">
+        <div class="overflow-y-auto h-[calc(100%_-_16px)] pb-28">
             <?php require_once "../app/views/components/dashboard/tabs/$tab.php" ?>
         </div>
     </div>

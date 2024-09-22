@@ -13,7 +13,8 @@ class ProductController extends Controller
     public function index()
     {
         $recentItems = $this->productModel->getRecentlyAddedAuctions();
-        $this->renderView("pages/home", ["recentItems" => $recentItems]);
+        $categories = $this->loadModel("Category")->getTrendingCategories();
+        $this->renderView("pages/home", ["recentItems" => $recentItems, "categories" => $categories]);
     }
 
     public function viewAllProducts($sort = "default", $category = "all")
@@ -39,6 +40,12 @@ class ProductController extends Controller
         $product = $this->productModel->getProduct($id)["product"];
         $images = $this->productModel->getProduct($id)["images"];
         $seller = $this->productModel->getProduct($id)["seller"];
+
+
+        if ($product["status"] !== 'live' && $_SESSION["user"]["user_role"] !== "admin") {
+            header("Location: item-not-found");
+        }
+
         $this->renderView(
             "pages/productView", [
             "recentItems" => $recentItems,
@@ -162,5 +169,19 @@ class ProductController extends Controller
             "images" => $this->productModel->getProduct($id)["images"],
             "product" => $this->productModel->getProduct($id)["product"]
         ]);
+    }
+
+    public function adminAuction($id)
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            if (isset($_POST["approve"])) {
+                $this->productModel->changeStatus("live", $id);
+                header("Location: dashboard/auctions");
+            }
+            if (isset($_POST["reject"])) {
+                $this->productModel->changeStatus("rejected", $id);
+                header("Location: dashboard/auctions");
+            }
+        }
     }
 }
