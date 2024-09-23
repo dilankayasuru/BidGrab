@@ -1,7 +1,4 @@
 <form id="manageAuctionForm" method="POST" action="/bidgrab/public/auction-manage?id=" class="bg-white p-8 shadow-lg rounded-xl text-center relative manageAuctionForm">
-
-
-
     <div class="flex gap-4 items-center justify-center">
         <button type="submit" value="reject" name="reject"
             class="py-2 px-4 rounded-lg border border-red text-red hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-300">

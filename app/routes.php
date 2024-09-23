@@ -37,4 +37,9 @@ return $routes = [
 
     'deposit' => ['controller' => 'WalletController', 'method' => 'deposit'],
     'withdraw' => ['controller' => 'WalletController', 'method' => 'withdraw'],
+
+    'user/activate' => ['controller' => 'UserController', 'method' => 'activate'],
+    'user/deactivate' => ['controller' => 'UserController', 'method' => 'deactivate'],
+
+    'register/user' => ['controller' => 'UserController', 'method' => 'addNew'],
 ];

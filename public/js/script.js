@@ -57,3 +57,7 @@ function loadProductImageEdit() {
     })
     loadProductImage()
 }
+
+function clearProfileImage() {
+    document.getElementById('profile-image-preview').src = "/bidgrab/public/images/profile.png"
+}

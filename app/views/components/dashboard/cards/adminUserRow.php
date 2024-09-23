@@ -5,11 +5,16 @@
     <p><?= $user["user_role"] ?></p>
     <p class="<?= $user["status"] == "active" ? 'bg-green' : 'bg-red' ?> px-4 py-1.5 text-white w-fit rounded-2xl"><?= $user["status"] ?></p>
     <div>
-        <a href="" class="px-2" target="_blank">
-            <i class="fa-solid fa-eye"></i>
-        </a>
-        <button type="button" value="" class="px-2">
-            <i class="fa-solid fa-pen-to-square"></i>
-        </button>
+        <?php if ($user["status"] == "active") : ?>
+            <a href="<?= BASE_URL . "user/deactivate?id=" . $user["user_id"] ?>"
+               class="px-2 text-gray hover:text-red transition-all duration-300">
+                <i class="fa-solid fa-ban"></i> Deactivate
+            </a>
+        <?php else: ?>
+            <a href="<?= BASE_URL . "user/activate?id=" . $user["user_id"] ?>"
+               class="px-2 text-gray hover:text-green transition-all duration-300">
+                <i class="fa-solid fa-user-check"></i> Activate
+            </a>
+        <?php endif; ?>
     </div>
 </div>

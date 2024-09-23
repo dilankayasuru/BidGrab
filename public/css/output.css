@@ -1082,6 +1082,10 @@ video {
   gap: 2rem;
 }
 
+.self-start {
+  align-self: flex-start;
+}
+
 .justify-self-start {
   justify-self: start;
 }
@@ -1291,6 +1295,11 @@ video {
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .pb-10 {
@@ -2230,6 +2239,16 @@ body {
 .hover\:text-black:hover {
   --tw-text-opacity: 1;
   color: rgb(30 30 30 / var(--tw-text-opacity));
+}
+
+.hover\:text-green:hover {
+  --tw-text-opacity: 1;
+  color: rgb(7 177 73 / var(--tw-text-opacity));
+}
+
+.hover\:text-red:hover {
+  --tw-text-opacity: 1;
+  color: rgb(244 105 105 / var(--tw-text-opacity));
 }
 
 .hover\:opacity-70:hover {

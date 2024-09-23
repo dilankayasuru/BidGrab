@@ -35,12 +35,17 @@ class User
             $this->db->bind(':UserID', $this->db->lastInsertId());
             $this->db->execute();
 
-            session_start();
-            $_SESSION["user"] = $this->db->result();
+            if (!(isset($_SESSION["user"]) && $_SESSION["user"]["user_role"] == "admin")) {
+                session_start();
+                $_SESSION["user"] = $this->db->result();
+            }
 
             $this->db->commitTransaction();
 
-            header("Location: ./");
+            if ($_SESSION["user"]["user_role"] == "user") {
+                header("Location: ./");
+            }
+
         } catch (Exception $e) {
             $this->db->rollBack();
             echo "Failed: " . $e->getMessage();
@@ -91,7 +96,7 @@ class User
 
         if (is_uploaded_file($_FILES["profile-pic"]['tmp_name'])) {
             $fileHandler = new FileHandler("profile-pic");
-            $this->profilePic = $fileHandler->uploadFile("user".$_SESSION["user"]["user_id"], "profileImages");
+            $this->profilePic = $fileHandler->uploadFile("user" . $_SESSION["user"]["user_id"], "profileImages");
         }
 
         try {
@@ -193,10 +198,130 @@ class User
         }
     }
 
-    public function getAllUsers()
+    public function getAllUsers($filter = "all", $sort = "default")
     {
-        $this->db->query("SELECT * FROM users");
+        $queryFilter = '';
+        $sortFilter = '';
+        switch ($filter) {
+            case "active":
+                $queryFilter = " WHERE status='active'";
+                break;
+            case "deactivate":
+                $queryFilter = " WHERE status='deactive'";
+                break;
+            case "admin":
+                $queryFilter = " WHERE user_role='admin'";
+                break;
+            case "user":
+                $queryFilter = " WHERE user_role='user'";
+                break;
+            default:
+                $queryFilter = '';
+                break;
+        }
+
+        switch ($sort) {
+            case "latest":
+                $sortFilter = " ORDER BY date_joined DESC";
+                break;
+            case "old":
+                $sortFilter = " ORDER BY date_joined ASC";
+                break;
+            default:
+                $sortFilter = '';
+                break;
+        }
+
+        $this->db->query("SELECT * FROM users" . $queryFilter . $sortFilter);
         $this->db->execute();
         return $this->db->results();
+    }
+
+
+    public function changeStatus($id, $status)
+    {
+        try {
+            $this->db->beginTransaction();
+            $this->db->query("UPDATE users SET status=:status WHERE user_id=:user_id");
+            $this->db->bind(':status', $status);
+            $this->db->bind(':user_id', $id);
+            $this->db->execute();
+            $this->db->commitTransaction();
+        } catch (PDOException $e) {
+            $this->db->rollback();
+            echo $e->getMessage();
+        }
+    }
+
+    public function createNew(
+        $firstName,
+        $lastName,
+        $email,
+        $password,
+        $userType,
+        $phone,
+        $address,
+        $street,
+        $city,
+        $district,
+        $province
+    )
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $walletID = '';
+
+            if ($userType == "user") {
+                $this->db->query("INSERT INTO wallet (balance) values (:balance)");
+                $this->db->bind(':balance', 0);
+                $this->db->execute();
+
+                $walletID = $this->db->lastInsertId();
+            }
+
+            $this->profilePic = $_SESSION["user"]["profile_pic"];
+
+            $this->db->query(
+                "
+INSERT INTO users (first_name, last_name, email, password, wallet_id, phone, address, street, city, district, province, user_role)
+VALUES (:fName, :lName, :email, :password, :walletId, :phone, :address, :street, :city, :district, :province, :user_role)
+"
+            );
+            $this->db->bind(':fName', $firstName);
+            $this->db->bind(':lName', $lastName);
+            $this->db->bind(':email', $email);
+            $this->db->bind(':password', $password);
+            $this->db->bind(':walletId', $walletID == '' ? null : $walletID);
+            $this->db->bind(':phone', $phone);
+            $this->db->bind(':address', $address);
+            $this->db->bind(':street', $street);
+            $this->db->bind(':city', $city);
+            $this->db->bind(':district', $district);
+            $this->db->bind(':province', $province);
+            $this->db->bind(':user_role', $userType);
+
+            $this->db->execute();
+
+            $userId = $this->db->lastInsertId();
+
+            if (is_uploaded_file($_FILES["profile-pic"]['tmp_name'])) {
+                $fileHandler = new FileHandler("profile-pic");
+                $this->profilePic = $fileHandler->uploadFile("user" . $userId, "profileImages");
+            }
+
+            if ($this->profilePic) {
+                $this->db->query("UPDATE users SET profile_pic=:profile_pic WHERE user_id=:user_id");
+                $this->db->bind(':profile_pic', $this->profilePic);
+                $this->db->bind(':user_id', $userId);
+                $this->db->execute();
+            }
+
+            $this->db->commitTransaction();
+        }
+        catch (PDOException $e) {
+            $this->db->rollback();
+            echo $e->getMessage();
+        }
     }
 }
