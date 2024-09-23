@@ -10,43 +10,46 @@
             </p>
         </div>
         <?php if ($isStarted && !$isExpired) : ?>
-            <div class="flex gap-4">
-                <div class="border border-blue-500 px-4 py-1 rounded-lg">
-                    <p class="text-gray">50 Bids</p>
-                </div>
-                <div class="border border-blue-500 px-4 py-1 rounded-lg">
-                    <p class="text-gray">Ends in: <span id="time-remaining"></span></p>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-center gap-6 w-full">
-                <div class="minus-btn bg-white w-11 h-11 grid items-center justify-center rounded-lg shadow-md border border-blue-500 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md duration-300 transition-all cursor-pointer">
-                    <i class="fa-solid fa-minus"></i>
-                </div>
-                <div>
-                    <label for="bidAmount" class="sr-only">Bid Amount</label>
-                    <div class="flex justify-center items-center">
-                        <span class="text-2xl">Rs. </span>
-                        <input type="number"
-                               class="border-b font-bold text-center text-2xl lg:w-44 sm:w-36 bg-fadeWhite focus:outline-none active:outline-none"
-                               value="<?= $product["current_price"] + 500 ?>" id="bidAmount">
+            <form action="" method="POST" class="grid grid-flow-row gap-4">
+                <div class="flex gap-4">
+                    <div class="border border-blue-500 px-4 py-1 rounded-lg">
+                        <p class="text-gray"><?= $product["bidCount"] ?> Bids</p>
                     </div>
+                    <div class="border border-blue-500 px-4 py-1 rounded-lg">
+                        <p class="text-gray">Ends in: <span id="time-remaining"></span></p>
+                    </div>
+                </div>
 
+                <div class="flex items-center justify-center gap-6 w-full">
+                    <div class="minus-btn bg-white w-11 h-11 grid items-center justify-center rounded-lg shadow-md border border-blue-500 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md duration-300 transition-all cursor-pointer">
+                        <i class="fa-solid fa-minus"></i>
+                    </div>
+                    <div>
+                        <label for="bidAmount" class="sr-only">Bid Amount</label>
+                        <div class="flex justify-center items-center">
+                            <span class="text-2xl">Rs. </span>
+                            <input type="number"
+                                   name="bidAmount"
+                                   class="border-b font-bold text-center text-2xl lg:w-44 sm:w-36 bg-fadeWhite focus:outline-none active:outline-none"
+                                   value="<?= $product["current_price"] + 500 ?>" id="bidAmount">
+                        </div>
+
+                    </div>
+                    <div class="plus-btn bg-white w-11 h-11 grid items-center justify-center rounded-lg shadow-md border border-blue-500 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md duration-300 transition-all cursor-pointer">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
                 </div>
-                <div class="plus-btn bg-white w-11 h-11 grid items-center justify-center rounded-lg shadow-md border border-blue-500 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md duration-300 transition-all cursor-pointer">
-                    <i class="fa-solid fa-plus"></i>
-                </div>
-            </div>
-            <button class=" w-full grid items-center justify-center py-4 bg-blue text-white rounded-lg hover:shadow-lg hover:-translate-y-0.5 active:shadow-md active:translate-y-0 transition-all duration-300 font-medium">
-                Place Bid
-            </button>
+                <button type="submit" class=" w-full grid items-center justify-center py-4 bg-blue text-white rounded-lg hover:shadow-lg hover:-translate-y-0.5 active:shadow-md active:translate-y-0 transition-all duration-300 font-medium">
+                    Place Bid
+                </button>
+            </form>
         <?php elseif ($isExpired): ?>
             <div class="text-gray text-center text-xl font-bold">
                 <p>Auction is Expired!</p>
             </div>
         <?php elseif (!$isStarted): ?>
             <div class="text-gray text-center text-xl font-bold">
-                <p>Auction starts at: <?=$product["start_date"]." ".$product["start_time"]?></p>
+                <p>Auction starts at: <?= $product["start_date"] . " " . $product["start_time"] ?></p>
             </div>
         <?php endif; ?>
 

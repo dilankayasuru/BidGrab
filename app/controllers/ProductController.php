@@ -49,6 +49,23 @@ class ProductController extends Controller
             header("Location: item-not-found");
         }
 
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+            if (!isset($_SESSION["user"]) || $_SESSION["user"]["user_role"] === "admin") {
+                header("Location: ./");
+            }
+
+            $result = $this->productModel->placeBid($productInfo["product"]["auction_id"], $_POST["bidAmount"]);
+
+            if ($result) {
+                echo "BidPlaced";
+            }
+            else {
+                echo "Wrong bid";
+            }
+
+        }
+
         $this->renderView(
             "pages/productView", [
             "recentItems" => $recentItems,

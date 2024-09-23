@@ -163,7 +163,13 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
     {
         $this->db->beginTransaction();
 
-        $this->db->query("SELECT *, (SELECT name FROM category WHERE category_id=auction_item.category_id) as category FROM auction_item WHERE auction_id=:auctionId");
+        $this->db->query(
+            "
+SELECT *, 
+       (SELECT name FROM category WHERE category_id=auction_item.category_id) as category, 
+       (SELECT COUNT(bid_id) FROM bid WHERE auction_id=auction_item.auction_id) as bidCount
+FROM auction_item WHERE auction_id=:auctionId"
+        );
         $this->db->bind(':auctionId', $id);
         $this->db->execute();
 
@@ -306,6 +312,60 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
             $this->db->commitTransaction();
         } catch (PDOException $e) {
             echo $e->getMessage();
+        }
+    }
+
+    public function placeBid($auctionId, $amount)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $this->db->query("SELECT MAX(amount) as highestBid, user_id FROM bid WHERE auction_id=:auction_id");
+            $this->db->bind(':auction_id', $auctionId);
+            $this->db->execute();
+            $highestBid = $this->db->result();
+
+            if ($highestBid) {
+                $this->db->query("UPDATE wallet SET balance=balance+:prevBid WHERE wallet_id=(SELECT wallet_id FROM users WHERE user_id=:user_id)");
+                $this->db->bind(':prevBid', $highestBid["highestBid"]);
+                $this->db->bind(':user_id', $highestBid["user_id"]);
+                $this->db->execute();
+            }
+
+            $this->db->query("SELECT balance > :amount as sufficientBalance FROM wallet WHERE wallet_id=(SELECT wallet_id FROM users WHERE user_id=:user_id)");
+            $this->db->bind(':amount', $amount);
+            $this->db->bind(':user_id', $_SESSION["user"]["user_id"]);
+            $this->db->execute();
+            $result = $this->db->result()["sufficientBalance"];
+
+            if (!$result) {
+                $this->db->rollback();
+                return false;
+            }
+
+            $this->db->query("UPDATE wallet SET balance=balance-:amount WHERE wallet_id=(SELECT wallet_id FROM users WHERE user_id=:user_id)");
+            $this->db->bind(':amount', $amount);
+            $this->db->bind(':user_id', $_SESSION["user"]["user_id"]);
+            $this->db->execute();
+
+            $this->db->query("INSERT INTO bid (auction_id, user_id, amount) VALUES (:auction_id, :user_id, :amount)");
+            $this->db->bind(':auction_id', $auctionId);
+            $this->db->bind(':user_id', $_SESSION["user"]["user_id"]);
+            $this->db->bind(':amount', $amount);
+            $this->db->execute();
+
+            $this->db->query("UPDATE auction_item SET current_price=:amount, winner=:userId WHERE auction_id=:auction_id");
+            $this->db->bind(':amount', $amount);
+            $this->db->bind(':userId', $_SESSION["user"]["user_id"]);
+            $this->db->bind(':auction_id', $auctionId);
+            $this->db->execute();
+
+            return $this->db->commitTransaction();
+
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            $this->db->rollback();
+            return false;
         }
     }
 }
