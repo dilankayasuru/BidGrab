@@ -7,6 +7,7 @@
     <script src="/BidGrab/public/js/dashboard.js" defer></script>
     <script src="/BidGrab/public/js/sortMenu.js" defer></script>
     <link rel="stylesheet" href="/BidGrab/public/css/output.css">
+    <script src="/BidGrab/public/js/script.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

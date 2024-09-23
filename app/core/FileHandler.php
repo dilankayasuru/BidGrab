@@ -100,13 +100,16 @@ class FileHandler
         }
     }
 
-    public static function removeAuctionImages($id)
+    public static function removeAuctionImages($id, $keep = [])
     {
         $files = glob("../app/server/auctionImages/$id-*.*");
 
         if ($files) {
             foreach ($files as $file) {
-                unlink($file);
+                $fileParts = explode('/', $file);
+                if (!in_array(end($fileParts), $keep)) {
+                    unlink($file);
+                }
             }
         }
     }

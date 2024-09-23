@@ -1,5 +1,6 @@
 <div class="grid place-items-center">
-    <form action="" method="POST" enctype="multipart/form-data" class="grid place-items-center py-4 w-fit">
+    <form action="" method="POST" enctype="multipart/form-data" class="grid place-items-center py-4 w-fit"
+          id="auction-form">
         <div class="mb-4">
             <h1 class="text-gray text-center text-xl mb-4">Product Information</h1>
             <div class="mb-4">
@@ -12,21 +13,33 @@
                                 $image = $images[$i]["image"] ?? '';
                                 $imageSrc = empty($image) ? "/bidgrab/public/images/placeholder.png" : "/bidgrab/app/server/auctionImages/$image";
                                 ?>
-                                <img src="<?=$imageSrc?>" alt="upload image"
+                                <img src="<?= $imageSrc ?>" alt="upload image"
                                      class="w-full h-full object-cover previewImage"
-                                     id="auction-image-preview-<?=$i?>">
-                                <i class="<?= empty($image) ? 'invisible' : 'visible' ?> fa-solid fa-circle-xmark cursor-pointer text-red absolute top-0 right-0 text-xl translate-x-1/2 -translate-y-1/2" onclick="removeImage()" id="image-<?=$i?>"></i>
+                                     id="auction-image-preview-<?= $i ?>">
+                                <i class="<?= empty($image) ? 'invisible' : 'visible' ?> fa-solid fa-circle-xmark cursor-pointer text-red absolute top-0 right-0 text-xl translate-x-1/2 -translate-y-1/2"
+                                   onclick="removeImage()" id="image-<?= $i ?>"></i>
                             </div>
-                            <input type="file" accept=".jpg, .jpeg, .png" name="products[]" id="auction-image-input-<?=$i?>"
-                                   onchange="loadProductImage()"
+                            <input type="file" accept=".jpg, .jpeg, .png" name="products[]"
+                                   id="auction-image-input-<?= $i ?>"
+                                <?php if (empty($images)) : ?>
+                                    onchange="loadProductImage()"
+                                <?php else: ?>
+                                    onchange="loadProductImageEdit()"
+                                <?php endif; ?>
                                    class="hidden">
-                            <label for="auction-image-input-<?=$i?>"
+                            <label for="auction-image-input-<?= $i ?>"
                                    class="cursor-pointer bg-blue py-1 px-1 w-8 h-8 rounded-full flex justify-center items-center absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2">
                                 <i class="fa-solid fa-pen-to-square text-white"></i>
                             </label>
                         </div>
                     <?php endfor; ?>
 
+                    <?php if (!empty($images)) : ?>
+                        <?php foreach ($images as $image) : ?>
+                            <input type="text" value="<?= $image['image'] ?>" name="oldImages[]"
+                                   class="hidden invisible oldImages">
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="mb-4">
@@ -172,39 +185,3 @@
         </div>
     </form>
 </div>
-
-<script>
-    function removeImage() {
-        let idNo = event.target.id.split('-')[1];
-        const auctionImage = document.getElementById(`auction-image-preview-${idNo}`);
-        auctionImage.src = "/bidgrab/public/images/placeholder.png";
-        document.getElementById(`auction-image-input-${idNo}`).value = '';
-
-        event.target.classList.remove('visible');
-        event.target.classList.add('invisible');
-    }
-
-    function loadProductImage() {
-        const file = event.target.files;
-        let idNo = event.target.id.split('-')[3];
-        const imageRemoveCross = document.getElementById(`image-${idNo}`);
-
-        imageRemoveCross.classList.add('visible');
-        imageRemoveCross.classList.remove('invisible');
-
-        if (file) {
-            console.log(file)
-            const fileReader = new FileReader();
-            const auctionImage = document.getElementById(`auction-image-preview-${idNo}`);
-
-            fileReader.onload = function (event) {
-                auctionImage.setAttribute('src', event.target.result);
-            }
-            fileReader.readAsDataURL(file[0]);
-        }
-    }
-
-    function clearImages() {
-        window.location.replace("/bidgrab/public/dashboard/auction-edit?id=<?=$product['auction_id']?>");
-    }
-</script>

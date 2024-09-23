@@ -127,11 +127,17 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
 
     private function removeOldImages($auctionId)
     {
-        FileHandler::removeAuctionImages($auctionId);
+        $oldImages = array_filter(array_values($_POST['oldImages']));
+        $deleteArray = rtrim(str_repeat('?, ', count($oldImages)), ', ');
+        $this->db->query("DELETE FROM item_image WHERE auction_id=? AND image NOT IN ($deleteArray)");
+        $this->db->bind(1, $auctionId);
 
-        $this->db->query("DELETE FROM item_image WHERE auction_id=:auctionId");
-        $this->db->bind(':auctionId', $auctionId);
+        foreach ($oldImages as $index => $image) {
+            $this->db->bind($index + 2, $image);
+        }
         $this->db->execute();
+
+        FileHandler::removeAuctionImages($auctionId, $oldImages);
     }
 
     public function deleteProduct($id)
@@ -206,7 +212,7 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
         try {
             $this->db->beginTransaction();
             $this->db->query(
-                "UPDATE auction_item SET 
+                "UPDATE auction_item SET
                         title=:title,
                         description=:description,
                         product_condition=:condition,
@@ -238,7 +244,7 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
 
             $this->db->commitTransaction();
 
-//            header("Location: /bidgrab/public/dashboard/auctions");
+            header("Location: /bidgrab/public/dashboard/auctions");
         } catch (Exception $e) {
             $this->db->rollback();
             echo $e->getMessage();
@@ -298,8 +304,7 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
             $this->db->bind(':id', $id);
             $this->db->execute();
             $this->db->commitTransaction();
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             echo $e->getMessage();
         }
     }
