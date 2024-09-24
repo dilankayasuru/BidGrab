@@ -14,7 +14,7 @@
         <?php endif; ?>
 
         <?php foreach ($products as $product) : ?>
-            <?php if ($filter == $product["status"] || $filter == "all") : ?>
+            <?php if ($filter == $product["status"] || $filter == "all" || ($filter === "live" && $product["isLive"])) : ?>
 
                 <?php if ($_SESSION["user"]["user_role"] == "admin") : ?>
                     <?php require "../app/views/components/dashboard/cards/adminAuctionRow.php"; ?>
@@ -55,7 +55,7 @@
         manageAuctionForm.action += auctionId;
 
         if (manageAuctionForm.id !== "deleteAuctionForm") {
-            document.getElementById('manage-auction-view').href = "<?=BASE_URL?>product?id="+auctionId;
+            document.getElementById('manage-auction-view').href = "<?=BASE_URL?>product?id=" + auctionId;
         }
     }
 

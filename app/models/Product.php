@@ -78,8 +78,12 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
         $orderBy = $sort == "latest" ? "ORDER BY date_added DESC" : ($sort == "old" ? "ORDER BY date_added ASC" : "");
 
         $query = "
-SELECT auction_item.*, CONCAT(auction_item.start_date,' ', auction_item.start_time) < NOW() AS isLive, CONCAT(auction_item.end_date,' ', auction_item.end_time) < NOW() AS isExpired, item_image.image, category.name as category, users.first_name as seller 
-FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.image 
+SELECT auction_item.*, 
+       CONCAT(auction_item.start_date,' ', auction_item.start_time) < NOW() AND CONCAT(auction_item.end_date,' ', auction_item.end_time) > NOW() AND auction_item.status = :status AS isLive, 
+       CONCAT(auction_item.end_date,' ', auction_item.end_time) < NOW() AS isExpired, 
+       item_image.image, category.name as category, users.first_name as seller 
+FROM auction_item 
+    LEFT JOIN item_image on auction_item.auction_id=item_image.image 
     LEFT JOIN category on category.category_id=auction_item.category_id JOIN users on users.user_id=auction_item.seller_id";
 
         if ($role == "user") {
@@ -93,6 +97,7 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
         if ($role == "user") {
             $this->db->bind(':userId', $_SESSION["user"]["user_id"]);
         }
+        $this->db->bind(':status', "approved");
 
         $this->db->execute();
 
@@ -283,7 +288,11 @@ FROM auction_item WHERE auction_id=:auctionId"
         }
 
         $query = "
-SELECT auction_item.*, item_image.image, category.name as category 
+SELECT 
+    auction_item.*,
+    CONCAT(auction_item.end_date,' ', auction_item.end_time) < NOW() AS isExpired,
+    CONCAT(auction_item.start_date,' ', auction_item.start_time) < NOW() AND CONCAT(auction_item.end_date,' ', auction_item.end_time) > NOW() AND auction_item.status = :status AS isLive,
+    item_image.image, category.name as category 
 FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.image 
     LEFT JOIN category on category.category_id=auction_item.category_id WHERE auction_item.status=:status$categoryQuery GROUP BY auction_item.auction_id $sortQuery";
 

@@ -74,4 +74,9 @@ class Database
     {
         return $this->dbh->lastInsertId();
     }
+
+    public function rowCount()
+    {
+        return $this->stmt->rowCount();
+    }
 }

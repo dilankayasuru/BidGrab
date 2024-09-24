@@ -1,4 +1,10 @@
-<div class="product-card rounded-xl border border-blue-500 shadow-md p-2 w-full bg-white">
+<div class="product-card rounded-xl border border-blue-500 shadow-md p-2 w-full bg-white relative">
+    <?php if ($product["isLive"]) : ?>
+        <span class="bg-white absolute top-0 left-0 px-2 py-1 mt-4 ml-4 shadow-lg rounded-md text-sm text-red font-bold flex justify-center items-center gap-2">
+            <span class="block w-2 h-2 rounded-full bg-red animate-ping"></span>
+            Live
+        </span>
+    <?php endif; ?>
     <div class="product-image mb-2">
         <?php
         if (empty($product["image"])) {
@@ -16,7 +22,8 @@
     <div class="bidding-info mb-4 flex justify-between gap-2">
         <div class="bidding-info-left">
             <p>Last Bid</p>
-            <p class="text-sm border border-blue-500 bg-fadeWhite py-2 px-4 rounded-lg">Rs. <?= $product["current_price"] ?></p>
+            <p class="text-sm border border-blue-500 bg-fadeWhite py-2 px-4 rounded-lg">
+                Rs. <?= $product["current_price"] ?></p>
         </div>
         <div class="biddin-info-right">
             <p>Ending in</p>

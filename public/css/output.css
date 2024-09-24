@@ -978,6 +978,10 @@ video {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
@@ -1034,6 +1038,14 @@ video {
   place-items: center;
 }
 
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
 .items-center {
   align-items: center;
 }
@@ -1080,10 +1092,6 @@ video {
 
 .gap-8 {
   gap: 2rem;
-}
-
-.self-start {
-  align-self: flex-start;
 }
 
 .justify-self-start {

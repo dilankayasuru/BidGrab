@@ -1,5 +1,6 @@
 <?php
 require_once "FileHandler.php";
+
 class App
 {
     protected $controller = 'ProductController';
@@ -8,6 +9,8 @@ class App
 
     public function __construct()
     {
+        $this->runScript();
+
         $urlParts = $this->parseUrl();
 
         require_once '../app/routes.php';
@@ -51,5 +54,22 @@ class App
         $url = explode('/', filter_var(rtrim((substr($parts[0], 1)), FILTER_SANITIZE_URL)));
 
         return array_slice($url, 2);
+    }
+
+    private function runScript()
+    {
+        $os = PHP_OS;
+
+        $scriptFile = SCRIPT_FILE;
+        $logFile = LOG_FILE;
+
+        if (stripos($os, 'WIN') === 0) {
+            // Windows OS
+            $command = "start /B $scriptFile > $logFile 2>&1";
+            exec($command);
+        } else {
+            // Linux
+            exec("php $scriptFile > /dev/null 2>&1 &");
+        }
     }
 }

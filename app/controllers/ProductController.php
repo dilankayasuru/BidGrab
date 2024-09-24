@@ -52,18 +52,13 @@ class ProductController extends Controller
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if (!isset($_SESSION["user"]) || $_SESSION["user"]["user_role"] === "admin") {
-                header("Location: ./");
+                header("Location: ./login");
             }
 
             $result = $this->productModel->placeBid($productInfo["product"]["auction_id"], $_POST["bidAmount"]);
-
             if ($result) {
-                echo "BidPlaced";
+                header("Location: product?id=$id");
             }
-            else {
-                echo "Wrong bid";
-            }
-
         }
 
         $this->renderView(
