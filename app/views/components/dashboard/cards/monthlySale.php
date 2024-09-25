@@ -10,18 +10,9 @@
     function monthlySaleChart() {
         let salesData = google.visualization.arrayToDataTable([
             ['Month', 'Sales'],
-            ['Jan', 1000],
-            ['Feb', 1170],
-            ['March', 660],
-            ['April', 1030],
-            ['May', 2500],
-            ['June', 8456],
-            ['July', 846],
-            ['Aug', 9056],
-            ['Sep', 805],
-            ['Oct', 780],
-            ['Nov', 965],
-            ['Dec', 859]
+            <?php foreach ($tabData["monthlySale"] as $monthlySale) : ?>
+            ['<?=$monthlySale["month"]?>', <?=$monthlySale["sales"]?>],
+            <?php endforeach;?>
         ]);
 
         let options = {

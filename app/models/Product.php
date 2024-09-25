@@ -81,10 +81,12 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
 SELECT auction_item.*, 
        CONCAT(auction_item.start_date,' ', auction_item.start_time) < NOW() AND CONCAT(auction_item.end_date,' ', auction_item.end_time) > NOW() AND auction_item.status = :status AS isLive, 
        CONCAT(auction_item.end_date,' ', auction_item.end_time) < NOW() AS isExpired, 
-       item_image.image, category.name as category, users.first_name as seller 
+       item_image.image, category.name as category, users.first_name as seller,
+       orders.tracking_no, orders.status as order_status, orders.order_id as order_id, orders.buyer_id as buyer_id, orders.price as order_price
 FROM auction_item 
     LEFT JOIN item_image on auction_item.auction_id=item_image.image 
-    LEFT JOIN category on category.category_id=auction_item.category_id JOIN users on users.user_id=auction_item.seller_id";
+    LEFT JOIN category on category.category_id=auction_item.category_id JOIN users on users.user_id=auction_item.seller_id
+    LEFT OUTER JOIN orders ON auction_item.auction_id=orders.item_id";
 
         if ($role == "user") {
             $query = $query . " WHERE auction_item.seller_id=:userId GROUP BY auction_item.auction_id $orderBy";
@@ -326,55 +328,61 @@ FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.ima
 
     public function placeBid($auctionId, $amount)
     {
-        try {
-            $this->db->beginTransaction();
+        $this->db->beginTransaction();
 
-            $this->db->query("SELECT MAX(amount) as highestBid, user_id FROM bid WHERE auction_id=:auction_id");
+        try {
+            $this->db->query("
+SELECT ai.current_price, w.wallet_id
+FROM auction_item ai JOIN users ON ai.winner=users.user_id 
+JOIN wallet w ON w.wallet_id=users.wallet_id
+WHERE auction_id=:auction_id");
             $this->db->bind(':auction_id', $auctionId);
             $this->db->execute();
-            $highestBid = $this->db->result();
+            $oldBidInfo = $this->db->result();
 
-            if ($highestBid) {
-                $this->db->query("UPDATE wallet SET balance=balance+:prevBid WHERE wallet_id=(SELECT wallet_id FROM users WHERE user_id=:user_id)");
-                $this->db->bind(':prevBid', $highestBid["highestBid"]);
-                $this->db->bind(':user_id', $highestBid["user_id"]);
+            if (!empty($oldBidInfo)) {
+                $this->db->query("UPDATE wallet SET balance=balance+:prevBid WHERE wallet_id=:wallet_id");
+                $this->db->bind(':prevBid', $oldBidInfo["current_price"]);
+                $this->db->bind(':wallet_id', $oldBidInfo["wallet_id"]);
                 $this->db->execute();
             }
 
-            $this->db->query("SELECT balance > :amount as sufficientBalance FROM wallet WHERE wallet_id=(SELECT wallet_id FROM users WHERE user_id=:user_id)");
+            $this->db->query("SELECT balance >= :amount as sufficientBalance FROM wallet WHERE wallet_id=(SELECT wallet_id FROM users WHERE user_id=:user_id)");
             $this->db->bind(':amount', $amount);
             $this->db->bind(':user_id', $_SESSION["user"]["user_id"]);
             $this->db->execute();
-            $result = $this->db->result()["sufficientBalance"];
 
-            if (!$result) {
-                $this->db->rollback();
-                return false;
+            if (!$this->db->result()["sufficientBalance"]) {
+                throw new Exception("Insufficient wallet balance");
             }
 
+            // Deduct the bid amount from the current user's wallet
             $this->db->query("UPDATE wallet SET balance=balance-:amount WHERE wallet_id=(SELECT wallet_id FROM users WHERE user_id=:user_id)");
             $this->db->bind(':amount', $amount);
             $this->db->bind(':user_id', $_SESSION["user"]["user_id"]);
             $this->db->execute();
 
+            // Insert the new bid
             $this->db->query("INSERT INTO bid (auction_id, user_id, amount) VALUES (:auction_id, :user_id, :amount)");
             $this->db->bind(':auction_id', $auctionId);
             $this->db->bind(':user_id', $_SESSION["user"]["user_id"]);
             $this->db->bind(':amount', $amount);
             $this->db->execute();
 
+            // Update the auction item with the new highest bid and winner
             $this->db->query("UPDATE auction_item SET current_price=:amount, winner=:userId WHERE auction_id=:auction_id");
             $this->db->bind(':amount', $amount);
             $this->db->bind(':userId', $_SESSION["user"]["user_id"]);
             $this->db->bind(':auction_id', $auctionId);
             $this->db->execute();
 
-            return $this->db->commitTransaction();
-
+            $this->db->commitTransaction();
+            return true;
         } catch (Exception $e) {
-            echo $e->getMessage();
             $this->db->rollback();
+            echo $e->getMessage();
             return false;
         }
+
     }
 }

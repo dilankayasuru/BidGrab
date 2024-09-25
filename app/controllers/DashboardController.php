@@ -2,7 +2,7 @@
 require_once "../app/core/Controller.php";
 require_once "../app/models/User.php";
 
-class Dashboard extends Controller
+class DashboardController extends Controller
 {
     private $user;
 
@@ -21,10 +21,12 @@ class Dashboard extends Controller
             return;
         }
 
+        $data = $this->loadModel('Dashboard')->getDashboardHome();
+
         if ($_SESSION["user"]["user_role"] == "admin") {
-            $this->renderView("pages/adminDashboard", ["tab" => "home"]);
+            $this->renderView("pages/adminDashboard", ["tab" => "home", "tabData" => $data]);
         } else {
-            $this->renderView("pages/userDashboard", ["tab" => "home"]);
+            $this->renderView("pages/userDashboard", ["tab" => "home", "tabData" => $data]);
         }
     }
 }

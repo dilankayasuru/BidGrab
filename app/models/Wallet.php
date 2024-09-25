@@ -10,12 +10,44 @@ class Wallet
         $this->db = new Database();
     }
 
-    public function getUserWallet($filter = "all")
+    public function getUserWallet()
     {
-        $this->db->query("SELECT * FROM wallet WHERE wallet_id=:wallet_id");
-        $this->db->bind(":wallet_id", $_SESSION["user"]["wallet_id"]);
+        $this->db->query("
+SELECT SUM(t.amount) AS onHold 
+FROM users u 
+    JOIN transaction t ON u.user_id=t.payee_id 
+WHERE t.status='onhold' AND u.user_id=:user_id;");
+        $this->db->bind(":user_id", $_SESSION["user"]["user_id"]);
         $this->db->execute();
-        return $this->db->result();
+        $onHold = $this->db->result();
+
+        $this->db->query("
+SELECT SUM(t.amount) AS spent 
+FROM users u 
+    JOIN transaction t ON u.user_id=t.payer_id 
+WHERE t.status='payed' AND u.user_id=:user_id;");
+        $this->db->bind(":user_id", $_SESSION["user"]["user_id"]);
+        $this->db->execute();
+        $spent = $this->db->result();
+
+
+        $this->db->query("
+SELECT SUM(t.amount) AS received 
+FROM users u 
+    JOIN transaction t ON u.user_id=t.payee_id 
+WHERE t.status='payed' AND u.user_id=:user_id;");
+        $this->db->bind(":user_id", $_SESSION["user"]["user_id"]);
+        $this->db->execute();
+        $received = $this->db->result();
+
+        $this->db->query("SELECT w.balance FROM wallet w JOIN users u ON w.wallet_id=u.wallet_id WHERE u.user_id=:user_id;");
+        $this->db->bind(":user_id", $_SESSION["user"]["user_id"]);
+        $this->db->execute();
+        $balance = $this->db->result();
+
+        return ["onHold" => $onHold, "spent" => $spent, "received" => $received, "balance" => $balance];
+
+
     }
 
     public function deposit($amount)

@@ -25,48 +25,19 @@
             <div id="sort-menu" class="hidden absolute end-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white"
                  role="menu">
                 <div class="p-2">
-                    <p class="sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                    <a href="<?=BASE_URL?>dashboard/transactions?sort=default" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                         Default
-                    </p>
+                    </a>
 
-                    <p class="sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                    <a href="<?=BASE_URL?>dashboard/transactions?sort=new" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                         Latest
-                    </p>
+                    </a>
 
-                    <p class="sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
+                    <a href="<?=BASE_URL?>dashboard/transactions?sort=old" class="block sort-menu-item rounded-lg px-4 py-2 text-sm text-gray hover:bg-fadeWhite hover:text-black cursor-pointer">
                         Old
-                    </p>
+                    </a>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="flex justify-between items-center mb-4">
-    <div class="flex gap-2">
-        <a href="#dashboard/auctions?tab=auctions&filter=all"
-           class="dashboard-filter-button <?= $_GET["tab"] == "auctions" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
-            All payments</a>
-        <a href="#live"
-           class="dashboard-filter-button <?= $_GET["tab"] == "live" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
-            On hold</a>
-        <a href="#pending"
-           class="dashboard-filter-button <?= $_GET["tab"] == "pending" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
-            Payed</a>
-        <a href="#completed"
-           class="dashboard-filter-button <?= $_GET["tab"] == "completed" ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
-            Canceled</a>
-    </div>
-    <div class="flex gap-2 items-center">
-        <a href="#prev"
-           class="shadow-md w-9 h-9 flex justify-center items-center rounded-full hover:shadow-lg active:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300">
-            <i class="fa-solid fa-chevron-left text-xl"></i>
-        </a>
-        <div>
-            <p>1 -3 of 3</p>
-        </div>
-        <a href="#next"
-           class="shadow-md w-9 h-9 flex justify-center items-center rounded-full hover:shadow-lg active:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300">
-            <i class="fa-solid fa-chevron-right text-xl"></i>
-        </a>
     </div>
 </div>

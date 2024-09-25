@@ -59,19 +59,6 @@
            class="dashboard-filter-button <?= $filter == 'completed' ? 'bg-blue text-white' : 'bg-fadeWhite text-gray' ?>">
             Completed</a>
     </div>
-    <div class="flex gap-2 items-center">
-        <a href="#prev"
-           class="shadow-md w-9 h-9 flex justify-center items-center rounded-full hover:shadow-lg active:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300">
-            <i class="fa-solid fa-chevron-left text-xl"></i>
-        </a>
-        <div>
-            <p>1 -3 of <?= count($products) ?></p>
-        </div>
-        <a href="#next"
-           class="shadow-md w-9 h-9 flex justify-center items-center rounded-full hover:shadow-lg active:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300">
-            <i class="fa-solid fa-chevron-right text-xl"></i>
-        </a>
-    </div>
 </div>
 
 <?php if ($_SESSION["user"]["user_role"] == "user") : ?>

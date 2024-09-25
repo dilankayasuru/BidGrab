@@ -61,3 +61,25 @@ function loadProductImageEdit() {
 function clearProfileImage() {
     document.getElementById('profile-image-preview').src = "/bidgrab/public/images/profile.png"
 }
+
+function openOrderManage(event, orderData) {
+    document.querySelector('.manageOrderContainer').classList.remove('hidden');
+    document.querySelector('.manageOrderContainer').classList.add('flex');
+    const orderManageSeller = document.getElementById('orderManageSeller');
+    const orderManageBuyer = document.getElementById('orderManageBuyer');
+    const orderManagePrice = document.getElementById('orderManagePrice');
+    const orderManageTracking = document.getElementById('orderManageTracking');
+    const orderId = document.getElementById('order_manage_id');
+
+    orderId.value = parseInt(orderData.orderId);
+    orderManageSeller.innerText = orderData.seller;
+    orderManageBuyer.innerText = orderData.buyer;
+    orderManagePrice.innerText = `Rs. ${orderData.price}`;
+    orderManageTracking.innerText = orderData.tracking;
+}
+
+function closeOrderManage() {
+    document.querySelector('.manageOrderContainer').classList.remove('flex');
+    document.querySelector('.manageOrderContainer').classList.add('hidden');
+    const orderForm = document.getElementById("manageOrderForm");
+}

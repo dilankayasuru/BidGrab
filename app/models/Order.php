@@ -41,4 +41,50 @@ GROUP BY o.order_id
         $this->db->execute();
         return $this->db->results();
     }
+
+    public function submitOrder($id, $tracking_no)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $this->db->query("UPDATE orders SET tracking_no=:tracking_no WHERE item_id=:item_id");
+            $this->db->bind(':tracking_no', $tracking_no);
+            $this->db->bind(':item_id', $id);
+            $this->db->execute();
+
+            $this->db->commitTransaction();
+        }
+        catch (PDOException $e) {
+            $this->db->rollback();
+            echo $e->getMessage();
+        }
+
+    }
+
+    public function manageOrder($id, $status)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $this->db->query("UPDATE orders SET status=:status WHERE order_id=:order_id");
+            $this->db->bind(':status', $status);
+            $this->db->bind(':order_id', $id);
+            $this->db->execute();
+
+            $transactionStatus = $status == "completed" ? "payed" : "canceled";
+
+
+            $this->db->query("UPDATE transaction SET status=:status WHERE order_id=:order_id");
+            $this->db->bind(':status', $transactionStatus);
+            $this->db->bind(':order_id', $id);
+            $this->db->execute();
+
+            $this->db->commitTransaction();
+            header('Location: '.BASE_URL.'dashboard/orders');
+        }
+        catch (PDOException $e) {
+            $this->db->rollback();
+            echo $e->getMessage();
+        }
+    }
 }

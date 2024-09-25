@@ -23,6 +23,17 @@ WHERE auction_item.status=:status AND auction_item.winner IS NOT NULL AND orders
     $db->bind(':status', 'completed');
     $db->execute();
 
+    $db->query("
+INSERT INTO transaction (payee_id, payer_id, order_id, amount) 
+SELECT DISTINCT auction_item.seller_id, auction_item.winner, orders.order_id, auction_item.current_price
+FROM auction_item
+LEFT JOIN orders ON auction_item.auction_id = orders.item_id
+LEFT JOIN transaction ON orders.order_id = transaction.order_id
+WHERE auction_item.status=:status AND auction_item.winner IS NOT NULL AND transaction.transaction_id IS NULL
+");
+    $db->bind(':status', 'completed');
+    $db->execute();
+
     $response = $db->commitTransaction();
 
     echo $response ? 'Executed' : 'Failed to execute';

@@ -10,8 +10,8 @@ return $routes = [
 
     'categories' => ['controller' => 'CategoryController', 'method' => 'getAllCategories'],
 
-    'dashboard' => ['controller' => 'Dashboard', 'method' => 'index'],
-    'dashboard/home' => ['controller' => 'Dashboard', 'method' => 'index'],
+    'dashboard' => ['controller' => 'DashboardController', 'method' => 'index'],
+    'dashboard/home' => ['controller' => 'DashboardController', 'method' => 'index'],
     'dashboard/orders' => ['controller' => 'OrderController', 'method' => 'getAllOrders'],
 
     'dashboard/categories' => ['controller' => 'CategoryController', 'method' => 'dashBoardCategories'],
@@ -21,6 +21,8 @@ return $routes = [
 
     'dashboard/profile' => ['controller' => 'UserController', 'method' => 'profile'],
     'dashboard/wallet' => ['controller' => 'WalletController', 'method' => 'getUserWallet'],
+
+    'dashboard/transactions' => ['controller' => 'TransactionController', 'method' => 'index'],
 
     'dashboard/add-new-auction' => ['controller' => 'ProductController', 'method' => 'addNew'],
     'dashboard/auctions' => ['controller' => 'ProductController', 'method' => 'getAllAuctions'],
@@ -42,4 +44,7 @@ return $routes = [
     'user/deactivate' => ['controller' => 'UserController', 'method' => 'deactivate'],
 
     'register/user' => ['controller' => 'UserController', 'method' => 'addNew'],
+
+    'order/submit' => ['controller' => 'OrderController', 'method' => 'submitOrder'],
+    'order/manage' => ['controller' => 'OrderController', 'method' => 'manageOrder'],
 ];

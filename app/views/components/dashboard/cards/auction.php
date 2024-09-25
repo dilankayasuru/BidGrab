@@ -62,18 +62,28 @@
         <p class="rounded-2xl <?= $product["status"] == 'approved' ? 'bg-green' : ($product["status"] == 'pending' ? 'bg-orange' : ($product["status"] == 'completed' ? 'bg-green' : 'bg-red')) ?> px-4 py-1.5 text-white w-fit"><?= ucfirst($product["status"]) ?></p>
     </div>
     <?php if ($product["status"] == "completed") : ?>
-        <form action="" method="POST" class="absolute bottom-0 right-0 mb-4 mr-4">
-            <div class="flex gap-2 items-center justify-end mb-1">
-                <input type="text"
-                       id="trackingNo"
-                       placeholder="Enter tracking number"
-                       class="appearance-none rounded-full border-blue border w-fit py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <button type="submit"
-                        class="block bg-blue py-1.5 px-4 rounded-2xl text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-300">
-                    Send
-                </button>
-            </div>
-            <label for="trackingNo">Enter tracking number to receive the payment</label>
+        <form action="<?= BASE_URL ?>order/submit" method="POST" class="absolute bottom-0 right-0 mb-4 mr-4">
+            <p class="text-end text-gray text-sm" ><?= ucfirst($product['order_status']) ?> order</p>
+            <?php if ($product['order_status'] !== 'completed') : ?>
+                <div class="flex gap-2 items-center justify-end mb-1 mt-2">
+                    <input type="text"
+                           id="trackingNo"
+                           name="trackingNo"
+                           value="<?= $product["tracking_no"] ?>"
+                           placeholder="Enter tracking number"
+                           class="appearance-none rounded-full border-blue border w-fit py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <button type="submit"
+                            class="block bg-blue py-1.5 px-4 rounded-2xl text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-300">
+                        Send
+                    </button>
+                    <input type="text" name="itemId" value="<?= $product['auction_id'] ?>" class="invisible hidden">
+
+                    <input type="text" name="buyerId" value="<?= $product['buyer_id'] ?>" class="invisible hidden">
+                    <input type="text" name="orderId" value="<?= $product['order_id'] ?>" class="invisible hidden">
+                    <input type="number" name="orderPrice" value="<?= $product['order_price'] ?>" class="invisible hidden">
+                </div>
+                <label for="trackingNo">Enter tracking number to receive the payment</label for="trackingNo">
+            <?php endif; ?>
         </form>
     <?php elseif ($product["status"] == "pending") : ?>
         <div class="flex gap-2 items-center justify-start absolute bottom-0 right-0 mb-4 mr-4">
@@ -105,4 +115,3 @@
         </div>
     <?php endif; ?>
 </div>
-

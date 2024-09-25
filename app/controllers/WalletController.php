@@ -13,7 +13,7 @@ class WalletController extends Controller
         $this->db = new Database();
     }
 
-    public function getUserWallet($filter = "all")
+    public function getUserWallet($filter = "all", $sort = "all")
     {
         if (!isset($_SESSION["user"])) {
             header("Location: login");
@@ -23,7 +23,8 @@ class WalletController extends Controller
         if ($_SESSION["user"]["user_role"] == "admin") {
             header("Location: login");
         } else {
-            $this->renderView("pages/userDashboard", ["tab" => "wallet", "wallet" => $this->walletModel->getUserWallet($filter), "filter" => $filter]);
+            $transactions = $this->loadModel("Transactions")->getTransactions($filter, $sort);
+            $this->renderView("pages/userDashboard", ["tab" => "wallet", "data" => $this->walletModel->getUserWallet(), "transactions" => $transactions, "filter" => $filter]);
         }
 
     }
