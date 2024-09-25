@@ -17,7 +17,7 @@ class ProductController extends Controller
         $this->renderView("pages/home", ["recentItems" => $recentItems, "categories" => $categories]);
     }
 
-    public function viewAllProducts($sort = "default", $category = "all")
+    public function viewAllProducts($sort = "default", $category = "all", $search = '')
     {
         $sortQuery = '';
 
@@ -29,9 +29,8 @@ class ProductController extends Controller
             $sortQuery = "date_added DESC";
         }
 
-        $auctionCount = $this->productModel->getCountOfAuctions();
-        $displayAuction = $this->productModel->displayAuctions("all", $sortQuery);
-        $this->renderView("pages/products", ["count" => $auctionCount, "auctions" => $displayAuction, "sort" => $sort, "category" => $category]);
+        $displayAuction = $this->productModel->displayAuctions("all", $sortQuery, 'approved', $search);
+        $this->renderView("pages/products", ["auctions" => $displayAuction, "sort" => $sort, "category" => $category]);
     }
 
     public function getProductById($id)

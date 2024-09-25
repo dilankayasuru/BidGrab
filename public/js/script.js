@@ -83,3 +83,12 @@ function closeOrderManage() {
     document.querySelector('.manageOrderContainer').classList.add('hidden');
     const orderForm = document.getElementById("manageOrderForm");
 }
+
+function controlMainSearch() {
+    const searchQuery = document.getElementById('searchQuery');
+    location.href = `/bidgrab/public/products?search=${searchQuery.value}`;
+}
+
+function initSearch() {
+    document.getElementById('searchQuery').value = event.currentTarget.value;
+}

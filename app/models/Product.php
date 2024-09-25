@@ -273,9 +273,34 @@ FROM auction_item WHERE auction_id=:auctionId"
         return $this->db->result();
     }
 
-    public function displayAuctions($category = "all", $sort = '', $status = 'approved')
+    public function displayAuctions($category = "all", $sort = '', $status = 'approved', $search = '')
     {
         $this->db->beginTransaction();
+
+        if (!empty($search)) {
+            $query = "
+SELECT 
+    auction_item.*,
+    CONCAT(auction_item.end_date,' ', auction_item.end_time) < NOW() AS isExpired,
+    CONCAT(auction_item.start_date,' ', auction_item.start_time) < NOW() AND CONCAT(auction_item.end_date,' ', auction_item.end_time) > NOW() AND auction_item.status = :status AS isLive,
+    item_image.image, category.name as category 
+FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.image 
+    LEFT JOIN category on category.category_id=auction_item.category_id 
+WHERE auction_item.status=:status AND MATCH(auction_item.title, auction_item.description) 
+AGAINST(:search IN BOOLEAN MODE) 
+GROUP BY auction_item.auction_id;";
+
+            $this->db->query($query);
+
+            $this->db->bind(':status', $status);
+            $this->db->bind(':search', $search);
+
+            $this->db->execute();
+
+            $this->db->commitTransaction();
+
+            return $this->db->results();
+        }
 
         if ($category !== "all") {
             $categoryQuery = ' AND category.category_id=:categoryId';
