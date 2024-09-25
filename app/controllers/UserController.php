@@ -3,6 +3,7 @@ require_once "../app/core/Controller.php";
 
 class UserController extends Controller
 {
+    // Method to change user profile
     public function changeProfile()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -11,19 +12,23 @@ class UserController extends Controller
         }
     }
 
+    // Method to reset user password
     public function resetPassword()
     {
         $userModel = $this->loadModel("User");
         $userModel->resetPassword();
     }
 
+    // Method to display user profile
     public function profile()
     {
+        // Redirect to login if user is not logged in
         if (!isset($_SESSION["user"])) {
             header("Location: login");
             return;
         }
 
+        // Render the appropriate dashboard view based on user role
         if ($_SESSION["user"]["user_role"] == "admin") {
             $this->renderView("pages/adminDashboard", ["tab" => "profile"]);
         } else {
@@ -31,8 +36,10 @@ class UserController extends Controller
         }
     }
 
+    // Method to get all users with optional filter and sort parameters
     public function getAllUsers($filter = "all", $sort = "default")
     {
+        // Redirect to login if user is not logged in or not an admin
         if (!isset($_SESSION["user"]) && $_SESSION["user"]["user_role"] !== "admin") {
             header("Location: login");
             return;
@@ -42,18 +49,21 @@ class UserController extends Controller
         $this->renderView("pages/adminDashboard", ["tab" => "users", "filter" => $filter, "sort" => $sort, "users" => $users]);
     }
 
+    // Method to activate a user by ID
     public function activate($id)
     {
         $userModel = $this->loadModel('User');
         $userModel->changeStatus($id, "active");
     }
 
+    // Method to deactivate a user by ID
     public function deactivate($id)
     {
         $userModel = $this->loadModel('User');
         $userModel->changeStatus($id, "deactive");
     }
 
+    // Method to add a new user
     public function addNew()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -85,6 +95,7 @@ class UserController extends Controller
             );
         }
 
+        // Render the create new user view if the user is an admin
         if ($_SESSION["user"]["user_role"] === "admin") {
             $this->renderView("pages/adminDashboard", ["tab" => "createNewUser"]);
         } else {

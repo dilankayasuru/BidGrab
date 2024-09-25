@@ -5,40 +5,50 @@ class Dashboard
 {
     private $db;
 
+    // Constructor to initialize the Database object
     public function __construct()
     {
         $this->db = new Database();
     }
 
+    // Method to get the dashboard home data
     public function getDashboardHome()
     {
+        // Check if the user is an admin
         if ($_SESSION["user"]["user_role"] == "admin") {
+            // Get the count of sold items
             $this->db->query("SELECT COUNT(order_id) AS sold_items FROM orders WHERE status=:status;");
             $this->db->bind(':status', 'completed');
             $this->db->execute();
             $orderCount = $this->db->result();
 
+            // Get the total number of auctions
             $this->db->query("SELECT COUNT(auction_id) AS total FROM auction_item;");
             $this->db->execute();
             $auctionCount = $this->db->result();
 
+            // Get the total number of users
             $this->db->query("SELECT COUNT(user_id) AS total FROM users;");
             $this->db->execute();
             $usersCount = $this->db->result();
 
+            // Get the total revenue for the admin
             $this->db->query("SELECT SUM(transaction.amount) * 0.25 as revenue FROM transaction WHERE transaction.status=:status;");
             $this->db->bind(':status', 'payed');
             $this->db->execute();
             $revenueAdmin = $this->db->result();
 
+            // Get the recent bids
             $this->db->query("SELECT auction_id, amount, time_stamp FROM bid LIMIT 10;");
             $this->db->execute();
             $recentBids = $this->db->results();
 
+            // Get the recent auctions
             $this->db->query("SELECT * FROM auction_item LIMIT 10;");
             $this->db->execute();
             $recentAuctions = $this->db->results();
 
+            // Get the monthly sales data
             $this->db->query("
 SELECT
     m.month,
@@ -68,7 +78,7 @@ ORDER BY m.month_num;
             $this->db->execute();
             $monthlySale = $this->db->results();
 
-
+            // Return the collected data for the admin dashboard
             return [
                 "totalSoldItems" => $orderCount,
                 "totalAuctions" => $auctionCount,
@@ -80,23 +90,27 @@ ORDER BY m.month_num;
             ];
         }
 
+        // Get the count of orders for the user
         $this->db->query("SELECT COUNT(order_id) AS total FROM orders WHERE buyer_id=:user_id AND NOT status=:status;");
         $this->db->bind(':status', 'canceled');
         $this->db->bind(':user_id', $_SESSION["user"]["user_id"]);
         $this->db->execute();
         $userOrders = $this->db->result();
 
+        // Get the count of auctions for the user
         $this->db->query("SELECT COUNT(auction_id) AS total FROM auction_item WHERE seller_id=:user_id;");
         $this->db->bind(':user_id', $_SESSION["user"]['user_id']);
         $this->db->execute();
         $userAuctions = $this->db->result();
 
+        // Get the count of sold items for the user
         $this->db->query("SELECT COUNT(order_id) AS total FROM orders WHERE status=:status AND NOT orders.buyer_id=:user_id;");
         $this->db->bind(':status', 'completed');
         $this->db->bind(':user_id', $_SESSION['user']['user_id']);
         $this->db->execute();
         $soldCount = $this->db->result();
 
+        // Get the revenue for the user
         $this->db->query("SELECT SUM(transaction.amount) - SUM(transaction.amount) * 0.25 as revenue
 FROM transaction WHERE transaction.status=:status AND transaction.payee_id=:user_id;");
         $this->db->bind(':status', 'payed');
@@ -104,17 +118,19 @@ FROM transaction WHERE transaction.status=:status AND transaction.payee_id=:user
         $this->db->execute();
         $userRevenue = $this->db->result();
 
-
+        // Get the recent bids for the user
         $this->db->query("SELECT auction_id, amount, time_stamp FROM bid WHERE user_id=:user_id LIMIT 10;");
         $this->db->bind(':user_id', $_SESSION["user"]["user_id"]);
         $this->db->execute();
         $recentBids = $this->db->results();
 
+        // Get the recent auctions for the user
         $this->db->query("SELECT * FROM auction_item WHERE seller_id=:user_id LIMIT 10;");
         $this->db->bind(':user_id', $_SESSION["user"]["user_id"]);
         $this->db->execute();
         $recentAuctions = $this->db->results();
 
+        // Get the monthly sales data for the user
         $this->db->query("
 SELECT
     m.month,
@@ -145,6 +161,7 @@ ORDER BY m.month_num;
         $this->db->execute();
         $monthlySale = $this->db->results();
 
+        // Return the collected data for the user dashboard
         return [
             "userOrders" => $userOrders,
             "userAuctions" => $userAuctions,
@@ -154,6 +171,5 @@ ORDER BY m.month_num;
             "recentAuctions" => $recentAuctions,
             "monthlySale" => $monthlySale,
         ];
-
     }
 }

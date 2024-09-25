@@ -5,11 +5,13 @@ class ProductController extends Controller
 {
     private $productModel;
 
+    // Constructor to initialize the Product model
     public function __construct()
     {
         $this->productModel = $this->loadModel("Product");
     }
 
+    // Method to display the home page with recently added auctions and trending categories
     public function index()
     {
         $recentItems = $this->productModel->getRecentlyAddedAuctions();
@@ -17,10 +19,12 @@ class ProductController extends Controller
         $this->renderView("pages/home", ["recentItems" => $recentItems, "categories" => $categories]);
     }
 
+    // Method to view all products with sorting, category, and search options
     public function viewAllProducts($sort = "default", $category = "all", $search = '')
     {
         $sortQuery = '';
 
+        // Determine the sorting query based on the sort parameter
         if ($sort == "lowtohigh") {
             $sortQuery = "current_price ASC";
         } elseif ($sort == "hightolow") {
@@ -29,10 +33,12 @@ class ProductController extends Controller
             $sortQuery = "date_added DESC";
         }
 
+        // Fetch and display auctions based on the sorting query
         $displayAuction = $this->productModel->displayAuctions("all", $sortQuery, 'approved', $search);
         $this->renderView("pages/products", ["auctions" => $displayAuction, "sort" => $sort, "category" => $category]);
     }
 
+    // Method to get product details by ID and handle bidding
     public function getProductById($id)
     {
         $recentItems = $this->productModel->getRecentlyAddedAuctions();
@@ -43,13 +49,13 @@ class ProductController extends Controller
         $isStarted = $productInfo["isStarted"];
         $isExpired = $productInfo["isExpired"];
 
-
+        // Redirect if the product is not approved and the user is not an admin
         if ($product["status"] !== 'approved' && $_SESSION["user"]["user_role"] !== "admin") {
             header("Location: item-not-found");
         }
 
+        // Handle POST request to place a bid
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
             if (!isset($_SESSION["user"]) || $_SESSION["user"]["user_role"] === "admin") {
                 header("Location: ./login");
             }
@@ -60,6 +66,7 @@ class ProductController extends Controller
             }
         }
 
+        // Render the product view page
         $this->renderView(
             "pages/productView", [
             "recentItems" => $recentItems,
@@ -71,10 +78,12 @@ class ProductController extends Controller
         ]);
     }
 
+    // Method to add a new product (auction)
     public function addNew()
     {
         $errors = [];
 
+        // Handle POST request to add a new product
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $productTitle = $_POST["auction-title"];
             $description = $_POST["description"];
@@ -86,6 +95,7 @@ class ProductController extends Controller
             $endTime = $_POST["endTime"];
             $basePrice = $_POST["basePrice"];
 
+            // Validate input fields
             if (empty($productTitle)) {
                 $errors[] = "Title is empty";
             }
@@ -114,10 +124,12 @@ class ProductController extends Controller
                 $errors[] = "Base price is empty";
             }
 
+            // If there are errors, return without adding the product
             if (!empty($errors)) {
                 return;
             }
 
+            // Add the new product
             $this->productModel->addNew(
                 $productTitle,
                 $description,
@@ -132,6 +144,7 @@ class ProductController extends Controller
 
         $categoryModel = $this->loadModel("Category");
 
+        // Render the appropriate view based on user role
         if ($_SESSION["user"]["user_role"] == "user") {
             $this->renderView("pages/userDashboard", ["tab" => "createNewAuction", "categories" => $categoryModel->getAllCategories()]);
         } else {
@@ -139,32 +152,36 @@ class ProductController extends Controller
         }
     }
 
+    // Method to get all auctions with optional filter and sort parameters
     public function getAllAuctions($filter = "all", $sort = "default")
     {
+        // Check if the user is logged in
         if (!isset($_SESSION["user"])) {
             header("Location: login");
             return;
         }
 
-
+        // Render the appropriate dashboard view based on user role
         if ($_SESSION["user"]["user_role"] == "admin") {
             $this->renderView("pages/adminDashboard", ["tab" => "auctions", "products" => $this->productModel->getAllAuctions("admin", $sort), "filter" => $filter, "sort" => $sort]);
         } else {
             $this->renderView("pages/userDashboard", ["tab" => "auctions", "products" => $this->productModel->getAllAuctions("user", $sort), "filter" => $filter, "sort" => $sort]);
         }
-
     }
 
+    // Method to delete a product by ID
     public function deleteProduct($id)
     {
         $this->productModel->deleteProduct($id);
     }
 
+    // Method to edit a product by ID
     public function editProduct($id)
     {
         $this->productModel = $this->loadModel("Product");
         $categoryModel = $this->loadModel("Category");
 
+        // Handle POST request to edit a product
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $description = $_POST["description"];
             $productTitle = $_POST["auction-title"];
@@ -176,9 +193,11 @@ class ProductController extends Controller
             $endTime = $_POST["endTime"];
             $basePrice = $_POST["basePrice"];
 
+            // Update the product details
             $this->productModel->editProduct($id, $productTitle, $description, $condition, $category, $startDate, $endDate, $startTime, $endTime, $basePrice);
         }
 
+        // Render the edit product view
         $this->renderView("pages/userDashboard", [
             "tab" => "createNewAuction",
             "categories" => $categoryModel->getAllCategories(),
@@ -187,8 +206,10 @@ class ProductController extends Controller
         ]);
     }
 
+    // Method for admin to approve or reject an auction
     public function adminAuction($id)
     {
+        // Handle POST request to approve or reject an auction
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (isset($_POST["approve"])) {
                 $this->productModel->changeStatus("approved", $id);

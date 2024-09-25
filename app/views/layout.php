@@ -23,16 +23,22 @@
 
 <?php
 
+// Split the server request URI into an array using "/" as the delimiter
 $serverUri = explode("/", str_replace("?", "/", $_SERVER["REQUEST_URI"]));
 
+// Check if the URI contains "login", "register", or "dashboard"
 if (in_array("login", $serverUri) || in_array("register", $serverUri) || in_array("dashboard", $serverUri)) {
+    // Include the specified view file
     require_once '../app/views/' . $viewPath . '.php';
 
 } else {
+    // Include the navbar component
     require_once "../app/views/components/navbar.php";
 
+    // Include the specified view file
     require_once '../app/views/' . $viewPath . '.php';
 
+    // Include the footer component
     require_once "../app/views/components/footer.php";
 }
 ?>

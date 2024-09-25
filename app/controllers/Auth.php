@@ -6,62 +6,79 @@ class Auth extends Controller
 {
     private $user;
 
+    // Constructor to initialize the User model
     public function __construct()
     {
         $this->user = new User();
     }
 
+    // Handle user login
     public function login()
     {
+        // Redirect to home if user is already logged in
         if (isset($_SESSION["user"])) {
             header("Location: ./");
             return;
         }
 
+        // Process login form submission
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $email = $_POST["email"];
             $password = $_POST["password"];
 
+            // Call the login method of the User model
             $this->user->login($email, $password);
         }
-        $this->renderView("pages/login");
 
+        // Render the login view
+        $this->renderView("pages/login");
     }
 
+    // Handle user registration
     public function register()
     {
+        // Redirect to home if user is already logged in
         if (isset($_SESSION["user"])) {
             header("Location: ./");
             return;
         }
 
+        // Process registration form submission
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $firstName = $_POST["firstName"];
             $lastName = $_POST["lastName"];
             $email = $_POST["email"];
             $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
+            // Call the registerUser method of the User model
             $this->user->registerUser($firstName, $lastName, $email, $password);
         }
-        $this->renderView("pages/register");
 
+        // Render the registration view
+        $this->renderView("pages/register");
     }
 
+    // Handle user sign out
     public function signOut()
     {
+        // Destroy the session and redirect to login page
         session_destroy();
         header("Location: login");
     }
 
+    // Authenticate the user by user ID
     public function authenticate($userId)
     {
+        // Redirect to login if the user ID does not match
         if ($_SESSION["user"]["user_id"] !== $userId) {
             header("Location: login");
         }
     }
 
+    // Authorize the user by role
     public function authorize($role)
     {
+        // Redirect to login if the user role does not match
         if ($_SESSION["user"]["user_role"] !== $role) {
             header("Location: login");
         }

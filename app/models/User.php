@@ -12,17 +12,20 @@ class User
         $this->db = new Database();
     }
 
+    // Register a new user
     public function registerUser($firstName, $lastName, $email, $password)
     {
         try {
             $this->db->beginTransaction();
 
+            // Insert a new wallet with a balance of 0
             $this->db->query("INSERT INTO wallet (balance) values (:balance)");
             $this->db->bind(':balance', 0);
             $this->db->execute();
 
             $walletID = $this->db->lastInsertId();
 
+            // Insert the new user with the wallet ID
             $this->db->query("INSERT INTO users (first_name, last_name, email, password, wallet_id) VALUES (:fName, :lName, :email, :password, :walletId)");
             $this->db->bind(':fName', $firstName);
             $this->db->bind(':lName', $lastName);
@@ -31,10 +34,12 @@ class User
             $this->db->bind(':walletId', $walletID);
             $this->db->execute();
 
+            // Retrieve the newly created user
             $this->db->query("SELECT * FROM users WHERE user_id=:UserID");
             $this->db->bind(':UserID', $this->db->lastInsertId());
             $this->db->execute();
 
+            // Start a session for the new user if not an admin
             if (!(isset($_SESSION["user"]) && $_SESSION["user"]["user_role"] == "admin")) {
                 session_start();
                 $_SESSION["user"] = $this->db->result();
@@ -42,6 +47,7 @@ class User
 
             $this->db->commitTransaction();
 
+            // Redirect user to home page if user role is 'user'
             if ($_SESSION["user"]["user_role"] == "user") {
                 header("Location: ./");
             }
@@ -52,10 +58,10 @@ class User
         }
     }
 
+    // Log in a user
     public function login($email, $password)
     {
         try {
-
             $this->db->query("SELECT * FROM users WHERE email=:email");
             $this->db->bind(':email', $email);
             $this->db->execute();
@@ -79,9 +85,10 @@ class User
         }
     }
 
+    // Change user profile information
     public function changeProfile()
     {
-
+        // Retrieve user input or use existing session data
         $firstName = $_POST["first-name"] ?? $_SESSION["user"]["first_name"];
         $lastName = $_POST["last-name"] ?? $_SESSION["user"]["last_name"];
         $email = $_POST["email"] ?? $_SESSION["user"]["email"];
@@ -94,6 +101,7 @@ class User
 
         $this->profilePic = $_SESSION["user"]["profile_pic"];
 
+        // Handle profile picture upload
         if (is_uploaded_file($_FILES["profile-pic"]['tmp_name'])) {
             $fileHandler = new FileHandler("profile-pic");
             $this->profilePic = $fileHandler->uploadFile("user" . $_SESSION["user"]["user_id"], "profileImages");
@@ -102,6 +110,7 @@ class User
         try {
             $this->db->beginTransaction();
 
+            // Update user information
             $this->db->query("
                     UPDATE users
                     SET first_name=:fName,
@@ -129,6 +138,7 @@ class User
             $this->db->bind(':userId', $_SESSION["user"]["user_id"]);
             $this->db->execute();
 
+            // Retrieve updated user information
             $this->db->query("SELECT * FROM users WHERE user_id=:UserID");
             $this->db->bind(':UserID', $_SESSION["user"]["user_id"]);
             $this->db->execute();
@@ -137,6 +147,7 @@ class User
 
             $this->db->commitTransaction();
 
+            // Redirect to profile page
             header("Location: dashboard/profile");
 
         } catch (Exception $e) {
@@ -145,9 +156,9 @@ class User
         }
     }
 
+    // Reset user password
     public function resetPassword()
     {
-
         $currentPassword = $_POST["currentPassword"];
         $newPassword = $_POST["newPassword"];
         $confirmPassword = $_POST["confirmPassword"];
@@ -172,6 +183,7 @@ class User
         try {
             $this->db->beginTransaction();
 
+            // Update user password
             $this->db->query("
                     UPDATE users
                     SET password=:password 
@@ -181,6 +193,7 @@ class User
             $this->db->bind(':userId', $_SESSION["user"]["user_id"]);
             $this->db->execute();
 
+            // Retrieve updated user information
             $this->db->query("SELECT * FROM users WHERE user_id=:UserID");
             $this->db->bind(':UserID', $_SESSION["user"]["user_id"]);
             $this->db->execute();
@@ -190,6 +203,7 @@ class User
 
             $this->db->commitTransaction();
 
+            // Redirect to profile tab
             header("Location: dashboard?tab=profile");
 
         } catch (Exception $e) {
@@ -198,6 +212,7 @@ class User
         }
     }
 
+    // Retrieve all users with optional filter and sort criteria
     public function getAllUsers($filter = "all", $sort = "default")
     {
         $queryFilter = '';
@@ -237,7 +252,7 @@ class User
         return $this->db->results();
     }
 
-
+    // Change the status of a user
     public function changeStatus($id, $status)
     {
         try {
@@ -253,6 +268,7 @@ class User
         }
     }
 
+    // Create a new user
     public function createNew(
         $firstName,
         $lastName,
@@ -272,6 +288,7 @@ class User
 
             $walletID = '';
 
+            // Create a wallet for user type 'user'
             if ($userType == "user") {
                 $this->db->query("INSERT INTO wallet (balance) values (:balance)");
                 $this->db->bind(':balance', 0);
@@ -282,6 +299,7 @@ class User
 
             $this->profilePic = $_SESSION["user"]["profile_pic"];
 
+            // Insert new user information
             $this->db->query(
                 "
 INSERT INTO users (first_name, last_name, email, password, wallet_id, phone, address, street, city, district, province, user_role)
@@ -305,11 +323,13 @@ VALUES (:fName, :lName, :email, :password, :walletId, :phone, :address, :street,
 
             $userId = $this->db->lastInsertId();
 
+            // Handle profile picture upload
             if (is_uploaded_file($_FILES["profile-pic"]['tmp_name'])) {
                 $fileHandler = new FileHandler("profile-pic");
                 $this->profilePic = $fileHandler->uploadFile("user" . $userId, "profileImages");
             }
 
+            // Update user profile picture if uploaded
             if ($this->profilePic) {
                 $this->db->query("UPDATE users SET profile_pic=:profile_pic WHERE user_id=:user_id");
                 $this->db->bind(':profile_pic', $this->profilePic);

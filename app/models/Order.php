@@ -7,14 +7,15 @@ class Order
 
     public function __construct()
     {
+        // Initialize the database connection
         $this->db = new Database();
     }
 
     public function getAllOrders()
     {
-
+        // Check if the user is a regular user
         if ($_SESSION["user"]["user_role"] === "user") {
-
+            // Query to get all orders for the logged-in user
             $this->db->query("
 SELECT o.*, CONCAT(seller.first_name,' ',seller.last_name) AS seller, ai.image, item.title, c.name as category, item.auction_id
 FROM orders o JOIN auction_item item ON o.item_id=item.auction_id 
@@ -28,6 +29,7 @@ WHERE o.buyer_id=:userId GROUP BY o.order_id
             return $this->db->results();
         }
 
+        // Query to get all orders with tracking numbers for admin
         $this->db->query("
 SELECT o.*, 
 CONCAT(seller.first_name, ' ', seller.last_name) as seller, 
@@ -45,44 +47,52 @@ GROUP BY o.order_id
     public function submitOrder($id, $tracking_no)
     {
         try {
+            // Begin a transaction
             $this->db->beginTransaction();
 
+            // Update the order with the tracking number
             $this->db->query("UPDATE orders SET tracking_no=:tracking_no WHERE item_id=:item_id");
             $this->db->bind(':tracking_no', $tracking_no);
             $this->db->bind(':item_id', $id);
             $this->db->execute();
 
+            // Commit the transaction
             $this->db->commitTransaction();
         }
         catch (PDOException $e) {
+            // Rollback the transaction in case of an error
             $this->db->rollback();
             echo $e->getMessage();
         }
-
     }
 
     public function manageOrder($id, $status)
     {
         try {
+            // Begin a transaction
             $this->db->beginTransaction();
 
+            // Update the order status
             $this->db->query("UPDATE orders SET status=:status WHERE order_id=:order_id");
             $this->db->bind(':status', $status);
             $this->db->bind(':order_id', $id);
             $this->db->execute();
 
+            // Determine the transaction status based on the order status
             $transactionStatus = $status == "completed" ? "payed" : "canceled";
 
-
+            // Update the transaction status
             $this->db->query("UPDATE transaction SET status=:status WHERE order_id=:order_id");
             $this->db->bind(':status', $transactionStatus);
             $this->db->bind(':order_id', $id);
             $this->db->execute();
 
+            // Commit the transaction
             $this->db->commitTransaction();
             header('Location: '.BASE_URL.'dashboard/orders');
         }
         catch (PDOException $e) {
+            // Rollback the transaction in case of an error
             $this->db->rollback();
             echo $e->getMessage();
         }
