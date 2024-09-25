@@ -55,4 +55,7 @@
     <a class="inline-block align-baseline font-bold text-sm" href="login">
         <span class="text-gray">Already have an account? </span>Sign In
     </a>
+    <p class="text-red">
+        <?= $error ?? '' ?>
+    </p>
 </main>

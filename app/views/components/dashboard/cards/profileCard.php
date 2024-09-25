@@ -2,15 +2,7 @@
     <p>Profile</p>
     <div class="grid place-items-center">
         <div class="w-28 h-28 mb-4 shadow-lg rounded-full overflow-hidden">
-            <?php
-            if ($_SESSION["user"]["profile_pic"] == 'no-pic') {
-                $userName = $_SESSION["user"]["first_name"].'+'.$_SESSION["user"]["last_name"];
-                $imageSrc = "https://avatar.iran.liara.run/username?username=$userName";
-            } else {
-                $imageSrc = "/bidgrab/app/server/profileImages/" . $_SESSION["user"]["profile_pic"];
-            }
-            ?>
-            <img  src="<?=$imageSrc?>" alt="profile picture">
+            <img  src="<?=FileHandler::getProfilePic()?>" alt="profile picture" class="h-full w-full object-cover">
         </div>
         <p class="mb-1">Name: <?=$_SESSION["user"]["first_name"]." ".$_SESSION["user"]["last_name"]?></p>
         <p class="mb-1">Email: <?=$_SESSION["user"]["email"]?></p>

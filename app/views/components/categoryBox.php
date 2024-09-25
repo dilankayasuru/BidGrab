@@ -1,4 +1,4 @@
-<div class="text-center flex items-center justify-center flex-col">
+<div class="text-center flex items-center justify-center flex-col" onclick="gotocategory('<?=$category["category_id"]?>')">
     <?php $imageSrc = FileHandler::getCategoryImage($category["picture"]) ?>
     <div class="categoryBox" style="background-image: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.1) 80%), url('http://localhost<?=$imageSrc?>');">
         <p class="sm:hidden"><?= $category["name"] ?></p>

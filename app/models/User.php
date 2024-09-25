@@ -67,13 +67,13 @@ class User
             $this->db->execute();
 
             if ($this->db->result() == null) {
-                return;
+                return false;
             }
 
             $hashedPassword = $this->db->result()["password"];
 
             if (!password_verify($password, $hashedPassword)) {
-                return;
+                return false;
             }
 
             session_start();
@@ -82,6 +82,7 @@ class User
             header("Location: ./");
         } catch (Exception $e) {
             echo "Failed: " . $e->getMessage();
+            return false;
         }
     }
 

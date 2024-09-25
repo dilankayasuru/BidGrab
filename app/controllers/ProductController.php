@@ -34,7 +34,7 @@ class ProductController extends Controller
         }
 
         // Fetch and display auctions based on the sorting query
-        $displayAuction = $this->productModel->displayAuctions("all", $sortQuery, 'approved', $search);
+        $displayAuction = $this->productModel->displayAuctions($category, $sortQuery, 'approved', $search);
         $this->renderView("pages/products", ["auctions" => $displayAuction, "sort" => $sort, "category" => $category]);
     }
 
@@ -57,12 +57,23 @@ class ProductController extends Controller
         // Handle POST request to place a bid
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (!isset($_SESSION["user"]) || $_SESSION["user"]["user_role"] === "admin") {
-                header("Location: ./login");
+                $error = "Please log in as a user to place bids!";
+            }
+            if (isset($_SESSION['user']) && ($product["seller_id"] === $_SESSION["user"]["user_id"])) {
+                $error = "Seller can not bid on own items!";
+            }
+            if (isset($_SESSION['user']) && $_SESSION["user"]["user_role"] === "admin") {
+                $error = "Please log in as a user to place bids!";
             }
 
-            $result = $this->productModel->placeBid($productInfo["product"]["auction_id"], $_POST["bidAmount"]);
-            if ($result) {
+            if (!isset($error)) {
+                $result = $this->productModel->placeBid($productInfo["product"]["auction_id"], $_POST["bidAmount"]);
+            }
+
+            if (!empty($result)) {
                 header("Location: product?id=$id");
+            } else {
+                $error = "Insufficient wallet balance";
             }
         }
 
@@ -75,6 +86,7 @@ class ProductController extends Controller
             "seller" => $seller,
             "isStarted" => $isStarted,
             "isExpired" => $isExpired,
+            "error" => $error ?? ''
         ]);
     }
 
@@ -220,5 +232,15 @@ class ProductController extends Controller
                 header("Location: dashboard/auctions");
             }
         }
+    }
+
+    public function about()
+    {
+        $this->renderView("pages/about", [], "About us");
+    }
+
+    public function contact()
+    {
+        $this->renderView("pages/contact", [], "Contact us");
     }
 }

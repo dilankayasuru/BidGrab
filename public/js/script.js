@@ -138,3 +138,7 @@ function initSearch() {
     // Set the search query input value to the current event target's value
     document.getElementById('searchQuery').value = event.currentTarget.value;
 }
+
+function gotocategory(id) {
+    location.href = `/bidgrab/public/products?category=${id}`;
+}

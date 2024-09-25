@@ -59,4 +59,8 @@ return $routes = [
     // Order submit and transaction init routes
     'order/submit' => ['controller' => 'OrderController', 'method' => 'submitOrder'],
     'order/manage' => ['controller' => 'OrderController', 'method' => 'manageOrder'],
+
+    // Other pages
+    'contact' => ['controller' => 'ProductController', 'method' => 'contact'],
+    'about' => ['controller' => 'ProductController', 'method' => 'about'],
 ];

@@ -1,14 +1,7 @@
 <div class="flex gap-4 justify-between items-center">
     <div class="flex gap-2 justify-between items-center">
         <div class="w-14 h-14 object-cover overflow-hidden border-blue-500 border shadow-md rounded-full">
-            <?php
-            if (empty($seller["profile_pic"])) {
-                $imageSrc = "https://avatar.iran.liara.run/username?username=" . $seller["first_name"] . '+' . $seller["last_name"];
-            } else {
-                $imageSrc = "/bidgrab/app/server/profileImages/" . $seller["profile_pic"];
-            }
-            ?>
-            <img src="<?=$imageSrc?>" alt="seller pic" class="w-full h-full">
+            <img src="<?=FileHandler::getProfilePic($seller['profile_pic'], $seller['first_name'].' '.$seller['last_name'])?>" alt="seller pic" class="w-full h-full">
         </div>
         <div>
             <p class="text-gray"><?= $seller["first_name"] . ' ' . $seller["last_name"] ?></p>

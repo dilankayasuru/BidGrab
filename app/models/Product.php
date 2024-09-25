@@ -508,7 +508,6 @@ WHERE auction_id=:auction_id");
         } catch (Exception $e) {
             // Rollback the transaction in case of an error
             $this->db->rollback();
-            echo $e->getMessage();
             return false;
         }
     }

@@ -35,4 +35,7 @@
     <a class="inline-block align-baseline font-bold text-sm" href="register">
         <span class="text-gray">Don't have an account? </span>Sign Up
     </a>
+    <p class="text-red">
+        <?= empty($error) ? "Invalid user name or password!" : '' ?>
+    </p>
 </main>

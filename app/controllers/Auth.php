@@ -27,11 +27,11 @@ class Auth extends Controller
             $password = $_POST["password"];
 
             // Call the login method of the User model
-            $this->user->login($email, $password);
+            $response = $this->user->login($email, $password);
         }
 
         // Render the login view
-        $this->renderView("pages/login");
+        $this->renderView("pages/login", ["error" => $response ?? true]);
     }
 
     // Handle user registration
@@ -48,14 +48,25 @@ class Auth extends Controller
             $firstName = $_POST["firstName"];
             $lastName = $_POST["lastName"];
             $email = $_POST["email"];
+            $confirmPassword = $_POST["confirmPassword"];
             $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
-
-            // Call the registerUser method of the User model
-            $this->user->registerUser($firstName, $lastName, $email, $password);
+            if (!filter_var($email, FILTER_SANITIZE_EMAIL)) {
+                $error = 'Enter valid email';
+            }
+            if (empty($firstName) || empty($lastName)) {
+                $error = 'Please enter your first name and last name';
+            }
+            if (!password_verify($confirmPassword, $password)) {
+                $error = 'Please verify your password';
+            }
+            if (!isset($error)) {
+                // Call the registerUser method of the User model
+                $this->user->registerUser($firstName, $lastName, $email, $password);
+            }
         }
 
         // Render the registration view
-        $this->renderView("pages/register");
+        $this->renderView("pages/register", ["error" => $error ?? '']);
     }
 
     // Handle user sign out

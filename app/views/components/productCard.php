@@ -1,4 +1,4 @@
-<div class="product-card rounded-xl border border-blue-500 shadow-md p-2 w-full bg-white relative">
+<div class="product-card rounded-xl border border-blue-500 shadow-md p-2 h-full w-full bg-white relative grid">
     <?php if ($product["isLive"]) : ?>
         <span class="bg-white absolute top-0 left-0 px-2 py-1 mt-4 ml-4 shadow-lg rounded-md text-sm text-red font-bold flex justify-center items-center gap-2">
             <span class="block w-2 h-2 rounded-full bg-red animate-ping"></span>
@@ -36,9 +36,8 @@
                 <?= $remaining->days ?>d <?= $remaining->h ?>h left</p>
         </div>
     </div>
-    <div class="actionBtn">
+    <div class="actionBtn justify-self-end w-full h-fit">
         <a href="product?id=<?= $product['auction_id'] ?>" class="primary-btn w-full h-full block text-center">View
             Auction</a>
     </div>
-
 </div>

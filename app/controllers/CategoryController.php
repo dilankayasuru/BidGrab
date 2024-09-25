@@ -113,4 +113,9 @@ class CategoryController extends Controller
     {
         $this->categoryModel->delete($id);
     }
+
+    public function getAllCategories()
+    {
+        $this->renderView("pages/categories", ["categories" => $this->categoryModel->getAllCategories()]);
+    }
 }
