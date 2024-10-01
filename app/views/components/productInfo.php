@@ -121,7 +121,7 @@ $endTimeTimeStamp = $endTime->getTimestamp();
         let mins = Math.floor((differance % (1000 * 60 * 60)) / (1000 * 60))
         let secs = Math.floor((differance % (1000 * 60)) / 1000);
 
-        document.getElementById("time-remaining").innerHTML = `${days > 0 ? days + "d" : ''} ${hours > 0 ? hours + "h" : ''} ${mins > 0 ? mins + "m" : ''} ${secs > 0 ? secs + "s" : ''} left`;
+        document.getElementById("time-remaining").innerHTML = `${days + "d"} ${hours + "h"} ${mins + "m"} ${secs + "s"} left`;
 
         // If the countdown is over, display an expiration message
         if (differance < 0) {

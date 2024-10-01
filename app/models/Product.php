@@ -66,15 +66,20 @@ class Product
 
         // Construct the query to fetch recently added auction items
         $query = "
-    SELECT auction_item.*, item_image.image, category.name as category 
+    SELECT auction_item.*, item_image.image, category.name as category,
+           CONCAT(auction_item.start_date,' ', auction_item.start_time) < NOW() AND CONCAT(auction_item.end_date,' ', auction_item.end_time) > NOW() AND auction_item.status = :status AS isLive,
+           TIMEDIFF(CONCAT(auction_item.end_date,' ', auction_item.end_time), NOW()) AS timeDifference
     FROM auction_item LEFT JOIN item_image on auction_item.auction_id=item_image.image 
-        LEFT JOIN category on category.category_id=auction_item.category_id WHERE auction_item.status=:status GROUP BY auction_item.auction_id ORDER by auction_item.date_added DESC LIMIT 10";
+    LEFT JOIN category on category.category_id=auction_item.category_id 
+    WHERE auction_item.status=:status AND CONCAT(auction_item.end_date,' ', auction_item.end_time) > NOW()
+    GROUP BY auction_item.auction_id 
+    ORDER by auction_item.date_added DESC LIMIT 10";
 
         // Prepare the query
         $this->db->query($query);
 
         // Bind the status parameter
-        $this->db->bind(':status', 'live');
+        $this->db->bind(':status', 'approved');
 
         // Execute the query
         $this->db->execute();
