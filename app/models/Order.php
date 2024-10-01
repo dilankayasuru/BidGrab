@@ -58,8 +58,8 @@ GROUP BY o.order_id
 
             // Commit the transaction
             $this->db->commitTransaction();
-        }
-        catch (PDOException $e) {
+            header('Location: ' . BASE_URL . 'dashboard/auctions');
+        } catch (PDOException $e) {
             // Rollback the transaction in case of an error
             $this->db->rollback();
             echo $e->getMessage();
@@ -87,11 +87,17 @@ GROUP BY o.order_id
             $this->db->bind(':order_id', $id);
             $this->db->execute();
 
+            // Update the wallet balance by adding the deposit amount
+            $this->db->query("
+UPDATE wallet SET balance=balance+(SELECT price FROM orders WHERE order_id=:order_id) 
+WHERE wallet_id=(SELECT wallet_id FROM users WHERE user_id=(SELECT seller_id FROM auction_item WHERE auction_id=(SELECT item_id FROM orders WHERE order_id=:order_id)))");
+            $this->db->bind(':order_id', $id);
+            $this->db->execute();
+
             // Commit the transaction
             $this->db->commitTransaction();
-            header('Location: '.BASE_URL.'dashboard/orders');
-        }
-        catch (PDOException $e) {
+            header('Location: ' . BASE_URL . 'dashboard/orders');
+        } catch (PDOException $e) {
             // Rollback the transaction in case of an error
             $this->db->rollback();
             echo $e->getMessage();

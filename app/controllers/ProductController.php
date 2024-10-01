@@ -72,8 +72,6 @@ class ProductController extends Controller
 
             if (!empty($result)) {
                 header("Location: product?id=$id");
-            } else {
-                $error = "Insufficient wallet balance";
             }
         }
 
