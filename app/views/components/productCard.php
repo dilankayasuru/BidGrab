@@ -26,27 +26,6 @@
                 Rs. <?= $product["current_price"] ?></p>
         </div>
         <div class="biddin-info-right">
-            <p>Ending in</p>
-            <?php
-            // Split the time difference into hours, minutes, and seconds
-            list($hours, $minutes, $seconds) = explode(':', $product["timeDifference"]);
-
-            // Convert hours, minutes, and seconds to total seconds
-            $totalSeconds = ($hours * 3600) + ($minutes * 60) + (int)$seconds;
-
-            // Calculate days, hours, minutes, and seconds
-            $days = floor($totalSeconds / 86400);
-            $hours = floor(($totalSeconds % 86400) / 3600);
-            $minutes = floor(($totalSeconds % 3600) / 60);
-            $seconds = $totalSeconds % 60;
-
-            ?>
-            <p class="text-sm border border-blue-500 bg-fadeWhite py-2 px-4 rounded-lg">
-                <?= $days > 0 ? $days.'d ' : '' ?>
-                <?= $hours > 0 ? $hours.'h ' : '' ?>
-                <?= $minutes > 0 ? $minutes.'m ' : '' ?>
-                <?= $seconds > 0 ? $seconds.'s ' : '' ?>
-            </p>
         </div>
     </div>
     <div class="actionBtn justify-self-end w-full h-fit">
