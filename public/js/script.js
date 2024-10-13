@@ -142,3 +142,68 @@ function initSearch() {
 function gotocategory(id) {
     location.href = `/bidgrab/public/products?category=${id}`;
 }
+
+function validateRegistrationPassword() {
+    const warning = document.getElementById('strongPwdWarning');
+    const confirmPWD = document.getElementById('confirmPassword');
+    const confirmPwdWarning = document.getElementById('confirmPasswordWarning');
+    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm;
+
+    if (!pattern.test(event.target.value)) {
+        warning.classList.remove('hidden');
+        warning.classList.remove('invisible');
+        event.target.classList.remove('border-blue-500');
+        event.target.classList.remove('border-green');
+        warning.classList.add('block');
+        event.target.classList.add('border-red');
+    }
+    else {
+        warning.classList.remove('block');
+        warning.classList.add('hidden');
+        warning.classList.add('invisible');
+        event.target.classList.remove('border-red');
+        event.target.classList.add('border-green');
+    }
+
+    if (event.target.value !== confirmPWD.value) {
+        confirmPwdWarning.classList.remove('hidden');
+        confirmPwdWarning.classList.remove('invisible');
+        confirmPWD.classList.remove('border-blue-500');
+        confirmPWD.classList.remove('border-green');
+        confirmPwdWarning.classList.add('block');
+        confirmPWD.classList.add('border-red');
+    } else {
+        confirmPwdWarning.classList.remove('block');
+        confirmPwdWarning.classList.add('hidden');
+        confirmPwdWarning.classList.add('invisible');
+        confirmPWD.classList.remove('border-red');
+        confirmPWD.classList.add('border-green');
+    }
+}
+
+function validateConfirmPassword() {
+    const warning = document.getElementById('confirmPasswordWarning');
+    const password = document.getElementById('password');
+    if (event.target.value !== password.value) {
+        warning.classList.remove('hidden');
+        warning.classList.remove('invisible');
+        event.target.classList.remove('border-blue-500');
+        event.target.classList.remove('border-green');
+        warning.classList.add('block');
+        event.target.classList.add('border-red');
+    }
+    else {
+        warning.classList.remove('block');
+        warning.classList.add('hidden');
+        warning.classList.add('invisible');
+        event.target.classList.remove('border-red');
+        event.target.classList.add('border-green');
+    }
+}
+
+function validateRegistrationForm() {
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+
+    return password.value === confirmPassword.value;
+}

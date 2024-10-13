@@ -31,7 +31,7 @@ class Auth extends Controller
         }
 
         // Render the login view
-        $this->renderView("pages/login", ["error" => $response ?? true]);
+        $this->renderView("pages/login", ["error" => $response ?? '']);
     }
 
     // Handle user registration
@@ -61,12 +61,11 @@ class Auth extends Controller
             }
             if (!isset($error)) {
                 // Call the registerUser method of the User model
-                $this->user->registerUser($firstName, $lastName, $email, $password);
+                $response = $this->user->registerUser($firstName, $lastName, $email, $password);
             }
         }
-
         // Render the registration view
-        $this->renderView("pages/register", ["error" => $error ?? '']);
+        $this->renderView("pages/register", ["error" => $error ?? $response ?? '']);
     }
 
     // Handle user sign out

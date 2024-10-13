@@ -54,7 +54,10 @@ class User
 
         } catch (Exception $e) {
             $this->db->rollBack();
-            echo "Failed: " . $e->getMessage();
+            if ($e->getCode() == '23000') {
+                return "User already exists!";
+            }
+//            echo "Failed: " . $e->getMessage();
         }
     }
 
@@ -67,13 +70,13 @@ class User
             $this->db->execute();
 
             if ($this->db->result() == null) {
-                return false;
+                return "Invalid user name or password";
             }
 
             $hashedPassword = $this->db->result()["password"];
 
             if (!password_verify($password, $hashedPassword)) {
-                return false;
+                return "Invalid user name or password";
             }
 
             session_start();
@@ -81,8 +84,7 @@ class User
 
             header("Location: ./");
         } catch (Exception $e) {
-            echo "Failed: " . $e->getMessage();
-            return false;
+            return $e->getMessage();
         }
     }
 
@@ -339,8 +341,7 @@ VALUES (:fName, :lName, :email, :password, :walletId, :phone, :address, :street,
             }
 
             $this->db->commitTransaction();
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             $this->db->rollback();
             echo $e->getMessage();
         }
