@@ -1,7 +1,7 @@
 <div class="flex justify-between mb-4">
     <div>
         <h1 class="text-2xl font-medium">Categories</h1>
-        <p class="text-gray">Total categories: <?= $auctionsCount ?? 0 ?></p>
+        <p class="text-gray">Total categories: <?= count($categories) ?? 0 ?></p>
     </div>
     <?php require_once "../app/views/components/dashboard/signOut.php"; ?>
 </div>
@@ -47,3 +47,4 @@
     <i class="fa-solid fa-plus text-xl"></i>
     <span class="pl-2">Add new category</span>
 </a>
+

@@ -52,13 +52,14 @@
                         placeholder="Enter product title"
                         name="auction-title"
                         value="<?= $product['title'] ?? ''; ?>"
+                        required
                         class="appearance-none rounded-lg border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 font-medium mb-2" for="description">
                     Description
                 </label>
-                <textarea rows="8" id="description" name="description" placeholder="Enter your product description"
+                <textarea rows="8" id="description" name="description" placeholder="Enter your product description" required
                           class="appearance-none rounded-lg border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 ><?= $product['description'] ?? ''; ?></textarea>
             </div>
@@ -73,6 +74,7 @@
                         <select
                                 name="condition"
                                 id="condition"
+                                required
                                 class="mr-2 appearance-auto rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                             <?php $itemCondition = $product['condition'] ?? '' ?>
                             <option value="new" <?= $itemCondition == 'new' ? 'selected' : ''; ?>>Brand new</option>
@@ -91,6 +93,7 @@
                         <select
                                 name="category"
                                 id="category"
+                                required
                                 class="mr-2 appearance-auto rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                             <?php $itemCategoryId = $product['category_id'] ?? '' ?>
                             <?php foreach ($categories as $category) : ?>
@@ -118,6 +121,7 @@
                             id="startDate"
                             type="date"
                             name="startDate"
+                            required
                             class="min-w-72 appearance-none rounded-lg border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
                 <div>
@@ -129,6 +133,7 @@
                             id="endDate"
                             type="date"
                             name="endDate"
+                            required
                             class="min-w-72 appearance-none rounded-lg border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
             </div>
@@ -142,6 +147,7 @@
                             id="startTime"
                             type="time"
                             name="startTime"
+                            required
                             class="min-w-72 appearance-none rounded-lg border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
                 <div>
@@ -153,6 +159,7 @@
                             id="endTime"
                             type="time"
                             name="endTime"
+                            required
                             class="min-w-72 appearance-none rounded-lg border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
             </div>
@@ -166,6 +173,7 @@
                         id="basePrice"
                         type="number"
                         name="basePrice"
+                        required
                         class="appearance-none rounded-xl border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
         </div>

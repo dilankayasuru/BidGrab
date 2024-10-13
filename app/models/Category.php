@@ -58,8 +58,8 @@ class Category
             // Redirect to the categories dashboard after successful addition
             header("Location: /bidgrab/public/dashboard/categories");
         } catch (Exception $e) {
-            echo $e->getMessage();
             $this->db->rollback();
+            return "Category is already exists!";
         }
     }
 
@@ -77,9 +77,10 @@ class Category
             $this->db->execute();
 
             $this->db->commitTransaction();
+            header("Location: /bidgrab/public/dashboard/categories");
         } catch (Exception $e) {
-            echo $e->getMessage();
             $this->db->rollback();
+            return "Category is already exists!";
         }
     }
 
@@ -89,21 +90,31 @@ class Category
         try {
             $this->db->beginTransaction();
 
+            $this->db->query("SELECT name FROM category WHERE category_id=:id");
+            $this->db->bind(':id', $id);
+            $this->db->execute();
+            $name = $this->db->result();
+
+            if ($name['name'] === 'Other') {
+                header("Location: /bidgrab/public/dashboard/categories?error=cannotdelete");
+                return;
+            }
+
             // Get the picture associated with the category
             $this->db->query("SELECT picture FROM category WHERE category_id=:id");
             $this->db->bind(':id', $id);
             $this->db->execute();
             $picture = $this->db->result();
 
-            // Remove the image file if it exists
-            if (!empty($picture["picture"])) {
-                FileHandler::removeImage($picture["picture"], 'categoryImages');
-            }
-
             // Delete the category from the database
             $this->db->query("DELETE FROM category WHERE category_id=:id");
             $this->db->bind(':id', $id);
             $this->db->execute();
+
+            // Remove the image file if it exists
+            if (!empty($picture["picture"])) {
+                FileHandler::removeImage($picture["picture"], 'categoryImages');
+            }
 
             $this->db->commitTransaction();
 

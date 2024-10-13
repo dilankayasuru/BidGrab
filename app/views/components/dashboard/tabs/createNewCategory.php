@@ -1,5 +1,6 @@
 <div class="grid place-items-center">
-    <form action="" method="POST" enctype="multipart/form-data" class="grid place-items-center py-4 w-full">
+    <form action="" method="POST" enctype="multipart/form-data" class="grid place-items-center py-4 w-full"
+          onsubmit="return validateCategoryAdd()">
         <div class="max-w-md w-full">
             <h1 class="text-gray text-center text-xl mb-4">Category Information</h1>
             <div class="mb-4 grid place-items-center">
@@ -48,7 +49,8 @@
                         }
                     </script>
                 </div>
-                <input type="text" name="saved-category-pic" value="<?=$category["picture"] ?? ''?>" class="hidden invisible">
+                <input type="text" name="saved-category-pic" value="<?= $category["picture"] ?? '' ?>"
+                       class="hidden invisible">
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 font-medium mb-2" for="category-name">
@@ -60,13 +62,16 @@
                         placeholder="Enter product title"
                         name="category-name"
                         value="<?= $category['name'] ?? ''; ?>"
+                        required
                         class="appearance-none rounded-lg border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <p class="text-center text-red text-sm"><?= $response ?? '' ?></p>
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 font-medium mb-2" for="category-description">
                     Category description
                 </label>
                 <textarea rows="8" id="category-description" name="description" placeholder="Enter category description"
+                          required
                           class="appearance-none rounded-lg border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 ><?= $category['description'] ?? ''; ?></textarea>
             </div>
@@ -91,4 +96,14 @@
             </div>
         </div>
     </form>
+    <?php if (!empty($errors)) : ?>
+        <?php foreach ($errors as $error) : ?>
+            <div class="z-20 animate-revealIn fixed top-16 bg-white rounded-lg px-4 py-2 flex justify-between items-center gap-4 w-fit mx-auto my-0 shadow-lg">
+                <i class="fa-solid fa-circle-exclamation text-red"></i>
+                <p class="text-red ">
+                    <?= $error ?>
+                </p>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </div>

@@ -165,7 +165,6 @@
             <p class="text-red ">
                 <?= $error == 'empty' ? 'Please enter valid inputs!' : ($error == "notmatched" ? 'Password does not match!' : 'Incorrect password please try again!') ?>
             </p>
-            <i class="fa-solid fa-xmark absolute top-0 right-0 p-2 cursor-pointer"></i>
         </div>
         <script>
             setTimeout(() => {

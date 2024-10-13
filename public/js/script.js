@@ -271,3 +271,8 @@ function validateChangePasswordFormSubmit() {
 
     return pattern.test(newPassword.value);
 }
+
+function validateCategoryAdd() {
+
+    return true;
+}

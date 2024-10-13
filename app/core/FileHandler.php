@@ -32,9 +32,9 @@ class FileHandler
         }
 
         // Check the file size
-        // if ($this->tempFile["size"] > 500000) {
-        //     return false;
-        // }
+        if ($this->tempFile["size"] > 5000000) {
+            return false;
+        }
 
         // Get the file extension and validate it
         $this->imageFileType = strtolower(pathinfo($this->targetFile, PATHINFO_EXTENSION));
