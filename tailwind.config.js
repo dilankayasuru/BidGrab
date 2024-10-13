@@ -39,12 +39,17 @@ module.exports = {
             },
             keyframes: {
                 revealIn: {
-                    '0%': { transform: 'translateY(-300%)' },
-                    '100%': { transform: 'translateY(0)' },
+                    '0%': {transform: 'translateY(-300%)'},
+                    '100%': {transform: 'translateY(0)'},
+                },
+                close: {
+                    '0%': {width: '0'},
+                    '100%': {width: '100%'},
                 }
             },
             animation: {
                 revealIn: 'revealIn 0.5s ease-in-out',
+                close: 'close 5s ease-in-out',
             }
         },
     },

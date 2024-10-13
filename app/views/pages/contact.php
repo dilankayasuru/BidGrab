@@ -24,7 +24,7 @@
             </div>
         </div>
     </div>
-    <form class="w-full mt-8">
+    <form class="w-full mt-8" method="POST">
         <div class="grid place-items-center">
             <div class="mb-4 w-full">
                 <label class="block text-gray-700 font-medium mb-2" for="name">
@@ -32,8 +32,9 @@
                 </label>
                 <input
                     id="name"
+                    name="sender"
                     type="text"
-                    placeholder="Enter your mail"
+                    placeholder="Enter your name"
                     class="appearance-none rounded-full border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             <div class="mb-4 w-full">
@@ -42,6 +43,7 @@
                 </label>
                 <input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="Enter your email"
                     class="appearance-none rounded-full border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -52,6 +54,7 @@
                 </label>
                 <input
                     id="subject"
+                    name="subject"
                     type="text"
                     placeholder="Enter subject"
                     class="appearance-none rounded-full border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -62,9 +65,10 @@
                 </label>
                 <textarea
                     id="Message"
+                    name="message"
                     type="text"
                     placeholder="Write your message..."
-                    class="appearance-none rounded-full border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                    class="appearance-none rounded-lg border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="8"></textarea>
             </div>
             <div class="mb-4 w-full">
                 <button

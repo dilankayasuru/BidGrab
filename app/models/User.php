@@ -57,7 +57,6 @@ class User
             if ($e->getCode() == '23000') {
                 return "User already exists!";
             }
-//            echo "Failed: " . $e->getMessage();
         }
     }
 
@@ -160,24 +159,23 @@ class User
     }
 
     // Reset user password
-    public function resetPassword()
+    public function resetPassword($currentPassword, $newPassword, $confirmPassword)
     {
-        $currentPassword = $_POST["currentPassword"];
-        $newPassword = $_POST["newPassword"];
-        $confirmPassword = $_POST["confirmPassword"];
-
         if (!isset($currentPassword) || !isset($newPassword) || !isset($confirmPassword)) {
-            echo "Null";
+            $error = "Password can not be empty!";
+            header("Location: ".BASE_URL."dashboard/profile?error=empty");
             return;
         }
 
         if ($newPassword !== $confirmPassword) {
-            echo "Wrong";
+            $error = "Password does not match!";
+            header("Location: ".BASE_URL."dashboard/profile?error=notmatched");
             return;
         }
 
         if (!password_verify($currentPassword, $_SESSION["user"]["password"])) {
-            echo "Incorrect";
+            $error = "Current password is incorrect!";
+            header("Location: ".BASE_URL."dashboard/profile?error=incorrect");
             return;
         }
 
@@ -207,11 +205,12 @@ class User
             $this->db->commitTransaction();
 
             // Redirect to profile tab
-            header("Location: dashboard?tab=profile");
+            header("Location: ".BASE_URL."dashboard/profile");
 
         } catch (Exception $e) {
             $this->db->rollBack();
-            echo "Failed: " . $e->getMessage();
+            echo $e->getMessage();
+//            header("Location: ".BASE_URL."dashboard/profile");
         }
     }
 

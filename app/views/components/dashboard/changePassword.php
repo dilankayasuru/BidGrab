@@ -1,10 +1,11 @@
-<div class="absolute backdrop-blur-sm w-dvw h-dvh z-10 top-0 left-0 flex justify-center items-center hidden" id="changePasswordForm">
+<div class="absolute backdrop-blur-sm w-dvw h-dvh z-10 top-0 left-0 flex justify-center items-center hidden"
+     id="changePasswordForm">
     <div class="w-fit bg-white rounded-xl p-4 min-w-96 border-blue-500 border shadow-lg">
         <div class="flex justify-between items-center mb-6">
             <h1 class="font-medium text-2xl">Change Password</h1>
             <i class="fa-solid fa-xmark text-2xl cursor-pointer" id="changePasswordClose"></i>
         </div>
-        <form action="reset-password" method="POST">
+        <form action="<?= BASE_URL ?>reset-password" method="POST" onsubmit="return validateChangePasswordFormSubmit()">
             <div class="grid place-items-center">
                 <div class="mb-4 w-full">
                     <label class="block text-gray-700 font-medium mb-2" for="currentPassword">
@@ -15,6 +16,7 @@
                             type="password"
                             placeholder="********"
                             name="currentPassword"
+                            required
                             class="appearance-none rounded-full border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
                 <div class="mb-4 w-full">
@@ -26,7 +28,11 @@
                             type="password"
                             placeholder="********"
                             name="newPassword"
+                            required
+                            oninput="validateNewPwd()"
                             class="appearance-none rounded-full border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <p class="hidden invisible text-red text-sm text-center" id="newPwdWarning">Please select an strong
+                        password!</p>
                 </div>
                 <div class="mb-6 w-full">
                     <label class="block text-gray-700 font-medium mb-2" for="confirmPassword">
@@ -37,7 +43,11 @@
                             type="password"
                             placeholder="********"
                             name="confirmPassword"
+                            required
+                            oninput="validateConfirmPwd()"
                             class="appearance-none rounded-full border-blue-500 border w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <p class="hidden invisible text-red text-sm text-center" id="confirmPwdWarning">Password does not
+                        match!</p>
                 </div>
                 <div class="mb-4 w-full">
                     <button

@@ -15,12 +15,16 @@ class UserController extends Controller
     // Method to reset user password
     public function resetPassword()
     {
+        $currentPassword = $_POST["currentPassword"];
+        $newPassword = $_POST["newPassword"];
+        $confirmPassword = $_POST["confirmPassword"];
+
         $userModel = $this->loadModel("User");
-        $userModel->resetPassword();
+        $userModel->resetPassword($currentPassword, $newPassword, $confirmPassword);
     }
 
     // Method to display user profile
-    public function profile()
+    public function profile($error = '')
     {
         // Redirect to login if user is not logged in
         if (!isset($_SESSION["user"])) {
@@ -30,9 +34,9 @@ class UserController extends Controller
 
         // Render the appropriate dashboard view based on user role
         if ($_SESSION["user"]["user_role"] == "admin") {
-            $this->renderView("pages/adminDashboard", ["tab" => "profile"]);
+            $this->renderView("pages/adminDashboard", ["tab" => "profile", "error" => $error]);
         } else {
-            $this->renderView("pages/userDashboard", ["tab" => "profile"]);
+            $this->renderView("pages/userDashboard", ["tab" => "profile", "error" => $error]);
         }
     }
 

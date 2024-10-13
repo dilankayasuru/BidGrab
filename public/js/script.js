@@ -156,8 +156,7 @@ function validateRegistrationPassword() {
         event.target.classList.remove('border-green');
         warning.classList.add('block');
         event.target.classList.add('border-red');
-    }
-    else {
+    } else {
         warning.classList.remove('block');
         warning.classList.add('hidden');
         warning.classList.add('invisible');
@@ -191,8 +190,7 @@ function validateConfirmPassword() {
         event.target.classList.remove('border-green');
         warning.classList.add('block');
         event.target.classList.add('border-red');
-    }
-    else {
+    } else {
         warning.classList.remove('block');
         warning.classList.add('hidden');
         warning.classList.add('invisible');
@@ -206,4 +204,70 @@ function validateRegistrationForm() {
     const confirmPassword = document.getElementById('confirmPassword');
 
     return password.value === confirmPassword.value;
+}
+
+function showWarning(targetElement, warningElement) {
+    targetElement.classList.remove('border-blue-500');
+    targetElement.classList.remove('border-green');
+    targetElement.classList.add('border-red');
+    warningElement.classList.remove('hidden');
+    warningElement.classList.remove('invisible');
+    warningElement.classList.add('block');
+}
+
+function hideWarning(targetElement, warningElement) {
+    targetElement.classList.remove('border-red');
+    targetElement.classList.add('border-green');
+    warningElement.classList.add('hidden');
+    warningElement.classList.add('invisible');
+    warningElement.classList.remove('block');
+}
+
+function validateNewPwd() {
+
+    const confirmPWD = document.getElementById('confirmPassword');
+    const newPwdWarning = document.getElementById('newPwdWarning');
+    const confirmPwdWarning = document.getElementById('confirmPwdWarning');
+
+    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm;
+
+    if (!pattern.test(event.target.value)) {
+        showWarning(event.target, newPwdWarning);
+    } else {
+        hideWarning(event.target, newPwdWarning);
+    }
+
+    if (event.target.value !== confirmPWD.value) {
+        showWarning(confirmPWD, confirmPwdWarning);
+    } else {
+        hideWarning(confirmPWD, confirmPwdWarning);
+    }
+}
+
+function validateConfirmPwd() {
+    const newPwd = document.getElementById('newPassword');
+    const confirmPwdWarning = document.getElementById('confirmPwdWarning');
+
+    if (event.target.value !== newPwd.value) {
+        showWarning(event.target, confirmPwdWarning);
+    } else {
+        hideWarning(event.target, confirmPwdWarning);
+    }
+}
+
+function validateChangePasswordFormSubmit() {
+    const currentPassword = document.getElementById('currentPassword');
+    const newPassword = document.getElementById('newPassword');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm;
+
+    if (newPassword.value !== confirmPassword.value) {
+        return false;
+    }
+
+    if (currentPassword.value.trim() === '' || newPassword.value.trim() === '' || confirmPassword.value.trim() === '') {
+        return false;
+    }
+
+    return pattern.test(newPassword.value);
 }
