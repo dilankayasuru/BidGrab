@@ -6,6 +6,6 @@
         </div>
         <p class="mb-1">Name: <?=$_SESSION["user"]["first_name"]." ".$_SESSION["user"]["last_name"]?></p>
         <p class="mb-1">Email: <?=$_SESSION["user"]["email"]?></p>
-        <p class="mb-1">Balance: Rs.1500</p>
+        <p class="mb-1">Balance: Rs.<?=$tabData["walletBalance"]["balance"]?></p>
     </div>
 </div>

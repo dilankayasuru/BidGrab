@@ -104,7 +104,9 @@ ORDER BY m.month_num;
         $userAuctions = $this->db->result();
 
         // Get the count of sold items for the user
-        $this->db->query("SELECT COUNT(order_id) AS total FROM orders WHERE status=:status AND NOT orders.buyer_id=:user_id;");
+        $this->db->query("SELECT COUNT(order_id) 
+FROM orders JOIN auction_item ON auction_item.auction_id=orders.item_id 
+WHERE auction_item.seller_id=:user_id AND orders.status=:status;");
         $this->db->bind(':status', 'completed');
         $this->db->bind(':user_id', $_SESSION['user']['user_id']);
         $this->db->execute();
@@ -129,6 +131,12 @@ FROM transaction WHERE transaction.status=:status AND transaction.payee_id=:user
         $this->db->bind(':user_id', $_SESSION["user"]["user_id"]);
         $this->db->execute();
         $recentAuctions = $this->db->results();
+
+        // Get the wallet balance of the user
+        $this->db->query("SELECT wallet.balance FROM wallet JOIN users ON users.wallet_id=wallet.wallet_id WHERE users.user_id=:user_id;");
+        $this->db->bind(':user_id', $_SESSION["user"]["user_id"]);
+        $this->db->execute();
+        $walletBalance = $this->db->result();
 
         // Get the monthly sales data for the user
         $this->db->query("
@@ -170,6 +178,7 @@ ORDER BY m.month_num;
             "recentBids" => $recentBids,
             "recentAuctions" => $recentAuctions,
             "monthlySale" => $monthlySale,
+            "walletBalance" => $walletBalance
         ];
     }
 }
